@@ -10,6 +10,8 @@ public class Sanskrit99ToUnicodeConverterTest {
 
 	private Sanskrit99ToUnicodeConverter converter = new Sanskrit99ToUnicodeConverter();
 
+	// ----------- WORD CONVERSION TESTS -------------
+
 	@Test
 	public void testConvert1() throws Exception {
 		String input = "nih&lt; AnIit nih&lt; kDu àÉuta$, sunhu krhu jae tuMhih saeha$.";
@@ -28,28 +30,6 @@ public class Sanskrit99ToUnicodeConverterTest {
 	public void testConvert3_kRiShNa() throws Exception {
 		String input = "k«:[";
 		String expected = "कृष्ण";
-		verify(input, expected);
-	}
-
-	@Test
-	public void testConvert1_kRIShNa() throws Exception {
-		String input = "k©:["; // using char point 169 for combining, not 168 or
-								// 176
-		String expected = "कॄष्ण";
-		verify(input, expected);
-	}
-
-	@Test
-	public void testConvert2_kRIShNa() throws Exception {
-		String input = "k¨:["; // using char point 168 for combining R^I
-		String expected = "कॄष्ण";
-		verify(input, expected);
-	}
-
-	@Test
-	public void testConvert3_kRIShNa() throws Exception {
-		String input = "k°:["; // using char point 176 for combining R^I
-		String expected = "कॄष्ण";
 		verify(input, expected);
 	}
 
@@ -152,7 +132,49 @@ public class Sanskrit99ToUnicodeConverterTest {
 		verify((char) 239, "श्र"); // zri
 	}
 
-	// -------- Manually added ------------
+	@Test
+	public void testConvert_183() throws Exception {
+		verify((char) 183, "·"); // centered period (aka middle dot). same in
+									// both. note: will be escaped to HTML4
+									// escape sequence &middot; by
+									// conversion
+	}
+
+	@Test
+	public void testConvert_173() throws Exception {
+		verify((char) 173, "­"); // soft hyphen. same in both. will be escaped
+									// to HTML4 escape sequence &shy; by
+									// conversion
+	}
+
+	@Test
+	public void testConvert_169() throws Exception {
+		verify((char) 169, "ॄ"); // vocalic R^I normal position (e.g. with k)
+		verify("k©:[", "कॄष्ण"); // kR^IShNa
+
+	}
+
+	@Test
+	public void testConvert_168() throws Exception {
+		verify((char) 168, "ॄ"); // vocalic R^I offset right position (e.g. used
+									// with t)
+		verify("t¨[", "तॄण"); // tR^INa
+		verify("Ã¨", "ञ्जॄ");// ~njR^I
+	}
+
+	@Test
+	public void testConvert_161() throws Exception {
+		// note: this is NOT an inverted candrabindu; it is instead a special
+		// ligature for R and anusvara. Because of the way sanskrit99 renders,
+		// this "character" must be placed at the end of the consonant and thus
+		// requires its position is different in unicode typing
+
+		verify((char) 161, "Rं"); // special pre-conversion mapping
+									// (Sanskrit99 --> Sanskrit99)
+		verify("kk¡xu", "कर्कंधु"); // karka.ndhu
+	}
+
+	// -------- MANUALLY ADDED CONVERSION ------------
 
 	@Test
 	public void testConvert_235() throws Exception {
@@ -205,14 +227,6 @@ public class Sanskrit99ToUnicodeConverterTest {
 	}
 
 	@Test
-	public void testConvert_183() throws Exception {
-		verify((char) 183, "·"); // centered period (aka middle dot). same in
-									// both. note: will be escaped to HTML4
-									// escape sequence &middot; by
-									// conversion
-	}
-
-	@Test
 	public void testConvert_178() throws Exception {
 		verify((char) 178, "क्न"); // kna
 	}
@@ -224,34 +238,10 @@ public class Sanskrit99ToUnicodeConverterTest {
 
 	@Test
 	public void testConvert_176() throws Exception {
-		verify((char) 176, "ॄ"); // vocalic R^I confirmed (according to Akshara
-									// Bridge)
-	}
+		verify((char) 176, "ॄ"); // vocalic R^I offset down (used e.g. with
+									// ~NkR^I)
+		verify("»°", "ङ्कॄ"); // ~NkR^I
 
-	@Test
-	public void testConvert_173() throws Exception {
-		verify((char) 173, "­"); // soft hyphen. same in both. will be escaped
-									// to HTML4 escape sequence &shy; by
-									// conversion
-	}
-
-	@Test
-	public void testConvert_161() throws Exception {
-		// inverted candrabindu. note, previously, the converter would output
-		// "Rं", i.e. R with anusvara (0x52 0x0902) to give the *appearance* of
-		// an inverted candrabindu (note the position of the "R" is then further
-		// changed). should this be the official inverted candrabindu (0x0900)
-		// instead, even though it doesn't read as well? note: even Akshara
-		// bridge will (IMO) incorrectly convert the Sanskrit99 text "kk¡xu" to
-		// "karka.ndhu" i.e. adding the r in
-
-		// if to leave as is (readable, but incorrect)
-		 verify((char) 161, "Rं"); // special preconversion (Sanskrit99 --> Sanskrit99)
-		 verify("kk¡xu", "कर्कंधु"); // karka.ndhu
-
-		// if changed (see line ~ 110 of sanskrit99_to_unicode.js)
-//		verify((char) 161, "ऀ"); // inverted candrabindu
-//		verify("kk¡xu", "ककऀधु"); // kakaऀdhu
 	}
 
 	@Test

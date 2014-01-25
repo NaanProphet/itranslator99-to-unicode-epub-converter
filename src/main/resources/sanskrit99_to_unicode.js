@@ -106,8 +106,6 @@ function convert_to_unicode(input_text) {
 			// **********************************************************************************
 			// Code for Replacing Special glyph : "¡" (reph+anusvAr)
 			// **********************************************************************************
-			// TODO should this be mapped to inverted candrabindu instead?
-//			modified_substring = modified_substring.replace(/¡/g, "ऀ");
 			modified_substring = modified_substring.replace(/¡/g, "Rं"); // at
 																			// some
 																			// places
