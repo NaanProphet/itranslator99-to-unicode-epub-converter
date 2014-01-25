@@ -1,4 +1,4 @@
-package org.dontexist.kb;
+package org.dontexist.kb.converter;
 
 import java.io.IOException;
 
@@ -16,6 +16,14 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 
 	private BidiMap<Character, Character> it2UnicodeMap = new DualHashBidiMap<Character, Character>();
 
+	/**
+	 * Converts PalladioIT input to Unicode output.
+	 * @param input
+	 * @return
+	 * @throws IOException
+	 * @throws ScriptException
+	 * @throws NoSuchMethodException
+	 */
 	@Override
 	public String convert(final String input) throws IOException, ScriptException, NoSuchMethodException {
 		// unescape HTML text before converting

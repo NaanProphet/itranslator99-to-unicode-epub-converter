@@ -1,4 +1,4 @@
-package org.dontexist.kb;
+package org.dontexist.kb.converter;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ function convert_to_unicode(input_text) {
 
 	var array_one = new Array(
 
-	"ß", // additions missing from original
+	"ß", "ë", "å", "ã", "â", "Þ", "Û", "×", "Ò", "Ð", "Í", "²", "±", "°", // additions missing from original
 			
 	"`", "ç", "ð", "¬", "ñ", "Õ", "¶", "í", "¹", "¾", "Æ", "Ó", "Ù",
 
@@ -32,7 +32,7 @@ function convert_to_unicode(input_text) {
 
 	var array_two = new Array(
 			
-	"प्न",
+	"प्न", "व्न", "भ्न", "ब्न", "ब्ज", "प्त्", "न्न्", "ध्न", "द्म", "द्न", "द्ग्र", "क्न", "न्क्र", "ॄ",
 
 	"ॐ", "म्न", "श्ल", "क्ल", "श्व", "द्र्य", "ग्न", "श्च", "घ्न", "ज्ज", "त्न", "द्ब", "न्त्र",
 
@@ -106,6 +106,8 @@ function convert_to_unicode(input_text) {
 			// **********************************************************************************
 			// Code for Replacing Special glyph : "¡" (reph+anusvAr)
 			// **********************************************************************************
+			// TODO should this be mapped to inverted candrabindu instead?
+//			modified_substring = modified_substring.replace(/¡/g, "ऀ");
 			modified_substring = modified_substring.replace(/¡/g, "Rं"); // at
 																			// some
 																			// places

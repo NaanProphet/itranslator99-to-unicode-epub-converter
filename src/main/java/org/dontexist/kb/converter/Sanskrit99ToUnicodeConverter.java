@@ -1,4 +1,4 @@
-package org.dontexist.kb;
+package org.dontexist.kb.converter;
 
 import java.io.File;
 import java.io.FileReader;
@@ -19,6 +19,17 @@ public class Sanskrit99ToUnicodeConverter extends Text2UnicodeConverter {
 	private static final String SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILE = "sanskrit99_to_unicode.js";
 	private static final Logger logger = LoggerFactory.getLogger(Sanskrit99ToUnicodeConverter.class);
 
+	/**
+	 * Converts Sanskrit99 input to Unicode output.
+	 * <p>
+	 * 
+	 * @param input
+	 * @return Unicode output <b>with characters escaped for HTML4<b>!!
+	 * @throws IOException
+	 * @throws ScriptException
+	 * @throws NoSuchMethodException
+	 */
+	@Override
 	public String convert(final String input) throws IOException, ScriptException, NoSuchMethodException {
 		// unescape HTML text before converting
 		final String unescapedInput = StringEscapeUtils.unescapeHtml4(input);
