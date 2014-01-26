@@ -79,7 +79,7 @@ public class Sanskrit99ToUnicodeConverterTest {
 
 	@Test
 	public void testConvert_249() throws Exception {
-		verify((char) 249, "हृ"); // hRR^i
+		verify((char) 249, "हृ"); // hR^i
 	}
 
 	@Test
@@ -149,7 +149,8 @@ public class Sanskrit99ToUnicodeConverterTest {
 
 	@Test
 	public void testConvert_169() throws Exception {
-		verify((char) 169, "ॄ"); // vocalic R^I normal position (e.g. with k)
+		verify((char) 169, "ॄ"); // vocalic R^I normal position (e.g. used with
+									// k)
 		verify("k©:[", "कॄष्ण"); // kR^IShNa
 
 	}
@@ -164,14 +165,30 @@ public class Sanskrit99ToUnicodeConverterTest {
 
 	@Test
 	public void testConvert_161() throws Exception {
-		// note: this is NOT an inverted candrabindu; it is instead a special
-		// ligature for R and anusvara. Because of the way sanskrit99 renders,
-		// this "character" must be placed at the end of the consonant and thus
-		// requires its position is different in unicode typing
-
-		verify((char) 161, "Rं"); // special pre-conversion mapping
-									// (Sanskrit99 --> Sanskrit99)
+		verify((char) 161, "Rं"); // note: this is NOT an inverted candrabindu;
+									// it is instead a special ligature for R
+									// and anusvara. Because of the way
+									// sanskrit99 renders, this "character" must
+									// be placed at the end of the consonant
+									// character (unlike Unicode fonts which can
+									// dynamically create the ligature) and thus
+									// requires special pre-conversion mapping
+									// (from Sanskrit99 to Sanskrit99)
 		verify("kk¡xu", "कर्कंधु"); // karka.ndhu
+	}
+
+	@Test
+	public void testConvert_105() throws Exception {
+		verify((char) 105, "ि"); // short combining i
+		verify("ik", "कि"); // test letter reordering
+	}
+	
+	@Test
+	public void testConvert_82() throws Exception {
+		verify((char) 82, "R"); // combining r. the logic will not
+								// replace by itself, but only when next to
+								// letters b/c order needs to be swapped
+		verify("kmR", "कर्म"); // example word with R
 	}
 
 	// -------- MANUALLY ADDED CONVERSION ------------
@@ -242,19 +259,6 @@ public class Sanskrit99ToUnicodeConverterTest {
 									// ~NkR^I)
 		verify("»°", "ङ्कॄ"); // ~NkR^I
 
-	}
-
-	@Test
-	public void testConvert_105() throws Exception {
-		verify((char) 105, "ि"); // short combining i. already covered
-	}
-
-	@Test
-	public void testConvert_82() throws Exception {
-		verify((char) 82, "R"); // this is the combining R. the logic will not
-								// replace by itself, but only when next to
-								// letters b/c order needs to be swapped
-		verify("kmR", "कर्म"); // example word with R
 	}
 
 }
