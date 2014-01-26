@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.script.ScriptException;
 import javax.swing.JFileChooser;
 
 import net.lingala.zip4j.core.ZipFile;
@@ -35,7 +34,7 @@ public class SpringDriver implements InitializingBean {
 	private final Sanskrit99ToUnicodeConverter san99Converter = new Sanskrit99ToUnicodeConverter();
 	private final PalladioIT2UnicodeConverter palladioITConverter = new PalladioIT2UnicodeConverter();
 
-	public void main() throws IOException, ScriptException, NoSuchMethodException, ZipException {
+	public void main() throws ZipException, IOException {
 		logger.debug("Reached SpringDriver!");
 
 		// -------- SELECT INPUT FOLDER -----------
@@ -61,58 +60,20 @@ public class SpringDriver implements InitializingBean {
 			ZipFile zipFile = new ZipFile(ithEpub); // epubs are actually zips
 			zipFile.extractAll(unzipFolderDestination); // creates destination
 														// automatically
-
+			// FIXME what if epubs are saved differently?
 			final File textFolder = new File(unzipFolderDestination + "/text/");
 			Collection<File> filesToConvert = drillDownFolderForAllHtmlFiles(textFolder);
 
 			// --------- READ FILE, PARSING AND REPLACING CONTENT INSIDE <SPAN>
 			// TAGS
 			// ----------
-			int fileProcessNum = 1;
 			for (File ithFile : filesToConvert) {
-				// if (fileProcessNum > 1) {
-				// // temp: process first file only
-				// break;
-				// }
 
-				String stringy = FileUtils.readFileToString(ithFile, "UTF8");
-				// do not escape html characters yet, because we need to split
-				// based
-				// on tags
-				StringBuffer outputStringy = new StringBuffer();
-				int fromIndex = 0;
-				while (true) {
-					int spanStart = stringy.indexOf("<span", fromIndex);
-					if (spanStart == -1) {
-						// flush out rest of file and quit
-						String restOfFile = stringy.substring(fromIndex);
-						String convertedRestOfFile = palladioITConverter.convertHtmlBlock(restOfFile);
-						outputStringy.append(convertedRestOfFile);
-						break;
-					}
-					String partBeforeSpan = stringy.substring(fromIndex, spanStart);
-					String convertedPartBeforeSpan = palladioITConverter.convertHtmlBlock(partBeforeSpan);
-					outputStringy.append(convertedPartBeforeSpan);
-					int spanEnd = stringy.indexOf("</span>", spanStart);
-
-					int beginIndex = spanStart;
-					int endIndex = spanEnd + "</span>".length();
-					String spanString = stringy.substring(beginIndex, endIndex);
-
-					// perform Unicode replacement logic
-					String convertedSpanString = performUnicodeReplacementOnSpanBlock(spanString);
-
-					// prepare for next iteration
-					fromIndex = endIndex;
-
-					// flush work
-					outputStringy.append(convertedSpanString);
-				}
+				StringBuffer convertedFileAsString = convertFileToUnicode(ithFile);
 
 				// overwrite file, since we created a new folder
 //				File ofile = new File(ithFile.getAbsolutePath().replace(".html", StringUtils.EMPTY) + "-new.html");
-				FileUtils.writeStringToFile(ithFile, outputStringy.toString(), "UTF8");
-				fileProcessNum++;
+				FileUtils.writeStringToFile(ithFile, convertedFileAsString.toString(), "UTF8");
 			}
 
 			// ---------- ZIP UP NEW EPUB ----------
@@ -125,7 +86,45 @@ public class SpringDriver implements InitializingBean {
 
 	}
 
-	private String performUnicodeReplacementOnSpanBlock(String spanString) throws IOException, ScriptException, NoSuchMethodException {
+	private StringBuffer convertFileToUnicode(File ithFile) throws IOException {
+		String stringy = FileUtils.readFileToString(ithFile, "UTF8");
+		// do not escape html characters yet, because we need to split
+		// based on tags
+		StringBuffer outputStringy = new StringBuffer();
+		int fromIndex = 0;
+		while (true) {
+			int spanStart = stringy.indexOf("<span", fromIndex);
+			if (spanStart == -1) {
+				// flush out rest of file and quit
+				String restOfFile = stringy.substring(fromIndex);
+				String convertedRestOfFile = palladioITConverter.convertHtmlBlock(restOfFile);
+				outputStringy.append(convertedRestOfFile);
+				break;
+			}
+			String partBeforeSpan = stringy.substring(fromIndex, spanStart);
+			String convertedPartBeforeSpan = palladioITConverter.convertHtmlBlock(partBeforeSpan);
+			outputStringy.append(convertedPartBeforeSpan);
+			int spanEnd = stringy.indexOf("</span>", spanStart);
+
+			int beginIndex = spanStart;
+			int endIndex = spanEnd + "</span>".length();
+			String spanString = stringy.substring(beginIndex, endIndex);
+
+			// perform Unicode replacement logic
+			String convertedSpanString = performUnicodeReplacementOnSpanBlock(spanString);
+
+			// prepare for next iteration
+			fromIndex = endIndex;
+
+			// flush work
+			outputStringy.append(convertedSpanString);
+		}
+		// add final newline at end to make files identical
+		outputStringy.append("\n");
+		return outputStringy;
+	}
+
+	private String performUnicodeReplacementOnSpanBlock(String spanString) {
 		String convertedSpanString;
 
 		// allow both santext, santext1, etc. to be replaced

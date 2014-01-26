@@ -2,8 +2,6 @@ package org.dontexist.kb.converter;
 
 import junit.framework.Assert;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.dontexist.kb.converter.Sanskrit99ToUnicodeConverter;
 import org.junit.Test;
 
 public class Sanskrit99ToUnicodeConverterTest {
@@ -12,32 +10,67 @@ public class Sanskrit99ToUnicodeConverterTest {
 	
 	// ----------- HELPER METHODS --------------------
 
-	private void verify(final Character sanskrit99InputChar, final String expectedUnescaped) throws Exception {
+	private void verify(final Character sanskrit99InputChar, final String expected) throws Exception {
 		String actual = converter.convert(sanskrit99InputChar.toString());
-		String expected = StringEscapeUtils.unescapeXml(expectedUnescaped);
 		Assert.assertEquals(expected, actual);
 	}
 
-	private void verify(final String sanskrit99InputString, final String expectedUnescaped) throws Exception {
+	private void verify(final String sanskrit99InputString, final String expected) throws Exception {
 		String actual = converter.convert(sanskrit99InputString);
-		String expected = StringEscapeUtils.unescapeXml(expectedUnescaped);
+		Assert.assertEquals(expected, actual);
+	}
+	
+	private void verifyHtml(final String sanskrit99InputString, final String expected) throws Exception {
+		String actual = converter.convertHtmlBlock(sanskrit99InputString);
 		Assert.assertEquals(expected, actual);
 	}
 
 	// ----------- WORD CONVERSION TESTS -------------
 
 	@Test
-	public void testConvert1() throws Exception {
-		String input = "nih&lt; AnIit nih&lt; kDu àÉuta$, sunhu krhu jae tuMhih saeha$.";
+	public void testConvert_1() throws Exception {
+		// test of literal "<" is used here rather than "&lt;"
+		String input = "nih< AnIit nih< kDu àÉuta$, sunhu krhu jae tuMhih saeha$.";
 		String expected = "नहिं अनीति नहिं कछु प्रभुताई। सुनहु करहु जो तुम्हहि सोहाई॥";
 		verify(input, expected);
 	}
 
 	@Test
 	public void testConvert2() throws Exception {
-		String input = "jgit àaßuyaTSwangaErv&lt;";
+		// literal "<" is used here rather than "&lt;"
+		String input = "jgit àaßuyaTSwangaErv<";
 		String expected = "जगति प्राप्नुयात्स्थानगौरवं";
 		verify(input, expected);
+	}
+	
+	@Test
+	public void testConvert_1_Negative() throws Exception {
+		// "&lt;" is incorrectly used here without calling convertHtmlBlock
+		String input = "nih< AnIit nih&lt; kDu àÉuta$, sunhu krhu jae tuMhih saeha$.";
+		String expected = "नहिं अनीति नहिृलतष कछु प्रभुताई। सुनहु करहु जो तुम्हहि सोहाई॥";
+		verify(input, expected);
+	}
+
+	@Test
+	public void testConvert2_Negative() throws Exception {
+		// "&lt;" is incorrectly used here without calling convertHtmlBlock
+		String input = "jgit àaßuyaTSwangaErv&lt;";
+		String expected = "जगति प्राप्नुयात्स्थानगौरवृलतष";
+		verify(input, expected);
+	}
+	
+	@Test
+	public void testConvertHtmlBlock1() throws Exception {
+		String input = "<div>nih&lt; AnIit nih&lt; kDu àÉuta$, sunhu krhu jae tuMhih saeha$.</div>";
+		String expected = "<div>नहिं अनीति नहिं कछु प्रभुताई। सुनहु करहु जो तुम्हहि सोहाई॥</div>";
+		verifyHtml(input, expected);
+	}
+
+	@Test
+	public void testConvertHtmlBlock2() throws Exception {
+		String input = "<div>jgit àaßuyaTSwangaErv&lt;</div>";
+		String expected = "<div>जगति प्राप्नुयात्स्थानगौरवं</div>";
+		verifyHtml(input, expected);
 	}
 
 	@Test

@@ -22,27 +22,19 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 	 * 
 	 * @param input
 	 * @return
-	 * @throws IOException
-	 * @throws ScriptException
-	 * @throws NoSuchMethodException
 	 */
 	@Override
-	public String convert(final String input) throws IOException, ScriptException, NoSuchMethodException {
-		// unescape HTML text before converting
-		final String unescapedInput = StringEscapeUtils.unescapeXml(input);
-
-		String output = unescapedInput; // initialize
+	public String convert(final String input) {
+		String output = input; // initialize
+		
 		for (Character itCharToConvert : it2UnicodeMap.keySet()) {
 			String from = itCharToConvert.toString();
 			String to = it2UnicodeMap.get(itCharToConvert).toString();
 			output = output.replaceAll(from, to);
 		}
 
-		// escape back before outputting
-		final String escapedOutput = StringEscapeUtils.unescapeXml(output);
-
-		logger.debug("Converted input [{}] to unicode output [{}]", input, escapedOutput);
-		return escapedOutput;
+		logger.debug("Converted input [{}] to unicode output [{}]", input, output);
+		return output;
 	}
 
 	// initialize mapping
