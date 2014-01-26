@@ -32,7 +32,7 @@ public class Sanskrit99ToUnicodeConverter extends Text2UnicodeConverter {
 	@Override
 	public String convert(final String input) throws IOException, ScriptException, NoSuchMethodException {
 		// unescape HTML text before converting
-		final String unescapedInput = StringEscapeUtils.unescapeHtml4(input);
+		final String unescapedInput = StringEscapeUtils.unescapeXml(input);
 
 		ScriptEngineManager factory = new ScriptEngineManager();
 		ScriptEngine engine = factory.getEngineByName("JavaScript");
@@ -42,7 +42,7 @@ public class Sanskrit99ToUnicodeConverter extends Text2UnicodeConverter {
 		String output = (String) inv.invokeFunction("convert_to_unicode", unescapedInput);
 
 		// escape back before outputting
-		final String escapedOutput = StringEscapeUtils.escapeHtml4(output);
+		final String escapedOutput = StringEscapeUtils.escapeXml(output);
 
 		logger.debug("Input [{}] --> Output [{}]", input, escapedOutput);
 		return escapedOutput;

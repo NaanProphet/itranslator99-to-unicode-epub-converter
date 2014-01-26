@@ -9,6 +9,20 @@ import org.junit.Test;
 public class Sanskrit99ToUnicodeConverterTest {
 
 	private Sanskrit99ToUnicodeConverter converter = new Sanskrit99ToUnicodeConverter();
+	
+	// ----------- HELPER METHODS --------------------
+
+	private void verify(final Character sanskrit99InputChar, final String expectedUnescaped) throws Exception {
+		String actual = converter.convert(sanskrit99InputChar.toString());
+		String expected = StringEscapeUtils.unescapeXml(expectedUnescaped);
+		Assert.assertEquals(expected, actual);
+	}
+
+	private void verify(final String sanskrit99InputString, final String expectedUnescaped) throws Exception {
+		String actual = converter.convert(sanskrit99InputString);
+		String expected = StringEscapeUtils.unescapeXml(expectedUnescaped);
+		Assert.assertEquals(expected, actual);
+	}
 
 	// ----------- WORD CONVERSION TESTS -------------
 
@@ -34,18 +48,6 @@ public class Sanskrit99ToUnicodeConverterTest {
 	}
 
 	// ----------- CHARACTER CONVERSION TESTS -------------
-
-	public void verify(final Character sanskrit99InputChar, final String expectedUnescaped) throws Exception {
-		String actual = converter.convert(sanskrit99InputChar.toString());
-		String expected = StringEscapeUtils.escapeHtml4(expectedUnescaped);
-		Assert.assertEquals(expected, actual);
-	}
-
-	public void verify(final String sanskrit99InputString, final String expectedUnescaped) throws Exception {
-		String actual = converter.convert(sanskrit99InputString);
-		String expected = StringEscapeUtils.escapeHtml4(expectedUnescaped);
-		Assert.assertEquals(expected, actual);
-	}
 
 	@Test
 	public void testConvert_255() throws Exception {
