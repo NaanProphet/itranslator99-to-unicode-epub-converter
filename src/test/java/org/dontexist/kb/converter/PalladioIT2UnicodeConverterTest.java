@@ -98,7 +98,13 @@ public class PalladioIT2UnicodeConverterTest {
 	
 	// ----------- NON-CONVERSION TESTS -------------
 	
-	// TODO
+	//
+	@Test
+	public void testNonconversion() throws Exception {
+		String input = "fiancé";
+		String expected = input;
+		verify(input, expected);
+	}
 	
 	// ----------- ESCAPE CHARACTERS CONVERSION TESTS -------------
 	

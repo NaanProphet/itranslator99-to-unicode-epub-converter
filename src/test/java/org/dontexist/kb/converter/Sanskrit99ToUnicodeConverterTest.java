@@ -72,6 +72,14 @@ public class Sanskrit99ToUnicodeConverterTest {
 		String expected = "<div>जगति प्राप्नुयात्स्थानगौरवं</div>";
 		verifyHtml(input, expected);
 	}
+	
+	@Test
+	// 
+	public void testConvertHtmlBlock3() throws Exception {
+		String input = "<p class=\"justify1\"><span class=\"santext\">ivvahidnimd&lt; Évtu h;Rdm!,<br class=\"calibre4\"/>m¼l&lt; twa va&lt; c ]emdm!.1.</span></p>";
+		String expected = "<p class=\"justify1\"><span class=\"santext\">विवाहदिनमिदं भवतु हर्षदम्।<br class=\"calibre4\"/>मङ्गलं तथा वां च क्षेमदम्॥१॥</span></p>";
+		verifyHtml(input, expected);
+	}
 
 	@Test
 	public void testConvert3_kRiShNa() throws Exception {

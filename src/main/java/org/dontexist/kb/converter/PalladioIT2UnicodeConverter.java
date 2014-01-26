@@ -1,21 +1,22 @@
 package org.dontexist.kb.converter;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.script.ScriptException;
-
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 
 	private static final Logger logger = LoggerFactory.getLogger(PalladioIT2UnicodeConverter.class);
 
-	// certain replacements have to occur in order, so used an LINKED hash map (ordered by insert order)
+	// certain replacements have to occur in order, so used an LINKED hash map
+	// (ordered by insert order)
 	private Map<Character, Character> it2UnicodeMap = new LinkedHashMap<Character, Character>();
+	
+	private Map<String, String> postReplacementCorrections = new HashMap<String, String>();
 
 	/**
 	 * Converts PalladioIT input to Unicode output.
@@ -26,15 +27,29 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 	@Override
 	public String convert(final String input) {
 		String output = input; // initialize
-		
+
 		for (Character itCharToConvert : it2UnicodeMap.keySet()) {
 			String from = itCharToConvert.toString();
 			String to = it2UnicodeMap.get(itCharToConvert).toString();
 			output = output.replaceAll(from, to);
 		}
 
+		// perform special replacements to correct non-sanskrit accented words
+		// that might have been incorrectly changed
+		output = performSpecialPostReplacementCorrections(output);
+
 		logger.debug("Converted input [{}] to unicode output [{}]", input, output);
 		return output;
+	}
+
+	private String performSpecialPostReplacementCorrections(final String output) {
+		String correctedOutput = output; // initialize
+		for (String from : postReplacementCorrections.keySet()) {
+			String to = postReplacementCorrections.get(from);
+			correctedOutput = StringUtils.replace(output, from, to);
+		}
+		logger.debug("Performed post replacements corrections on [{}] to [{}]", output, correctedOutput);
+		return correctedOutput;
 	}
 
 	// initialize mapping
@@ -82,6 +97,10 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 		addToMap(	0x00DE, 		0x0331); 			// Þ -> Vedik accent _
 		addToMap(	0x00F7, 		0x030E); 			// ÷ -> Vedik accent ''
 		// @formatter:on
+		
+		
+		// ---- POST REPLACEMENT CORRECTION MAPPINGS
+		postReplacementCorrections.put("fiancī", "fiancé");
 	}
 
 	private void addToMap(int itCodePoint, int unicodeCodePoint) {
