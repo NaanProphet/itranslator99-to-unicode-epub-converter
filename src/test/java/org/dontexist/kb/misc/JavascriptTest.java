@@ -1,4 +1,4 @@
-package org.dontexist.kb;
+package org.dontexist.kb.misc;
 
 import java.io.File;
 import java.io.FileReader;

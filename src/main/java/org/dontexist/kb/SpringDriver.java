@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class SpringDriver implements InitializingBean {
 
-	private static final Logger logger = LoggerFactory.getLogger(SpringDriver.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SpringDriver.class);
 
 	@Value("${sanskrit99.span.class}")
 	private String sanskrit99SpanClassCsv;
@@ -35,7 +35,7 @@ public class SpringDriver implements InitializingBean {
 	private final PalladioIT2UnicodeConverter palladioITConverter = new PalladioIT2UnicodeConverter();
 
 	public void main() throws ZipException, IOException {
-		logger.debug("Reached SpringDriver!");
+		LOGGER.debug("Reached SpringDriver!");
 
 		// -------- SELECT INPUT FOLDER -----------
 
@@ -53,13 +53,16 @@ public class SpringDriver implements InitializingBean {
 			String unzipFolderDestination = FilenameUtils.removeExtension(ithEpub.getAbsolutePath()) + "-unicode";
 			File unzipDestinationFile = new File(unzipFolderDestination);
 			if (unzipDestinationFile.exists()) {
-				FileUtils.deleteDirectory(unzipDestinationFile); // deletes even if not empty
+				// deletes even if not empty
+				FileUtils.deleteDirectory(unzipDestinationFile);
 			}
 			;
 
-			ZipFile zipFile = new ZipFile(ithEpub); // epubs are actually zips
-			zipFile.extractAll(unzipFolderDestination); // creates destination
-														// automatically
+			// epubs are actually zips
+			ZipFile zipFile = new ZipFile(ithEpub);
+			// creates destination automatically
+			zipFile.extractAll(unzipFolderDestination);
+
 			// FIXME what if epubs are saved differently?
 			final File textFolder = new File(unzipFolderDestination + "/text/");
 			Collection<File> filesToConvert = drillDownFolderForAllHtmlFiles(textFolder);
@@ -69,28 +72,32 @@ public class SpringDriver implements InitializingBean {
 			// ----------
 			for (File ithFile : filesToConvert) {
 
-				StringBuffer convertedFileAsString = convertFileToUnicode(ithFile);
+				StringBuilder convertedFileAsString = convertFileToUnicode(ithFile);
 
 				// overwrite file, since we created a new folder
-//				File ofile = new File(ithFile.getAbsolutePath().replace(".html", StringUtils.EMPTY) + "-new.html");
+				// File ofile = new
+				// File(ithFile.getAbsolutePath().replace(".html",
+				// StringUtils.EMPTY) + "-new.html");
 				FileUtils.writeStringToFile(ithFile, convertedFileAsString.toString(), "UTF8");
 			}
 
 			// ---------- ZIP UP NEW EPUB ----------
-			ZipFile newEpubFile = new ZipFile(unzipFolderDestination + ".epub");
-			ZipParameters parameters = new ZipParameters();
-			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
-			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
-			newEpubFile.addFolder(unzipFolderDestination, parameters);
+			// ZipFile newEpubFile = new ZipFile(unzipFolderDestination +
+			// ".epub");
+			// ZipParameters parameters = new ZipParameters();
+			// parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+			// parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_MAXIMUM);
+			// newEpubFile.addFolder(unzipFolderDestination, parameters);
+			CreateZipFileDirectory.main(unzipFolderDestination + ".epub", unzipFolderDestination);
 		}
 
 	}
 
-	private StringBuffer convertFileToUnicode(File ithFile) throws IOException {
+	private StringBuilder convertFileToUnicode(File ithFile) throws IOException {
 		String stringy = FileUtils.readFileToString(ithFile, "UTF8");
 		// do not escape html characters yet, because we need to split
 		// based on tags
-		StringBuffer outputStringy = new StringBuffer();
+		StringBuilder outputStringy = new StringBuilder();
 		int fromIndex = 0;
 		while (true) {
 			int spanStart = stringy.indexOf("<span", fromIndex);
@@ -168,7 +175,7 @@ public class SpringDriver implements InitializingBean {
 		return f.getSelectedFile();
 	}
 
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		String[] spanClasses = StringUtils.split(sanskrit99SpanClassCsv, ",");
 		for (String ithSpanClass : spanClasses) {
 			sanskrit99SpanClasses.add(ithSpanClass);

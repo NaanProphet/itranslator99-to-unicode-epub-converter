@@ -41,7 +41,7 @@ public abstract class Text2UnicodeConverter {
 		Assert.isTrue(indexesOfBegTag.size() == indexesOfEndTag.size(),
 				"Mismatched number of < and > tags! Was a complete HTML tag passed in?");
 
-		StringBuffer output = new StringBuffer();
+		StringBuilder output = new StringBuilder();
 		for (int i = 0; i < indexesOfBegTag.size(); i++) {
 			int ithBegIndex = indexesOfBegTag.get(i); // <
 			int ithEndIndex = indexesOfEndTag.get(i); // >

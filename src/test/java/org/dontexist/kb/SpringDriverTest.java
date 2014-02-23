@@ -25,7 +25,7 @@ public class SpringDriverTest {
 	
 	private void verify(File inputfile, File actualOutputFile, File expectedOutputFile) throws IOException, Exception {
 		actualOutputFile.deleteOnExit();
-		StringBuffer convertedFileAsString = (StringBuffer) ReflectionTestUtils.invokeMethod(springDriver, "convertFileToUnicode", inputfile);
+		StringBuilder convertedFileAsString = (StringBuilder) ReflectionTestUtils.invokeMethod(springDriver, "convertFileToUnicode", inputfile);
 		FileUtils.writeStringToFile(actualOutputFile, convertedFileAsString.toString());
 		AssertFile.assertFileEquals(expectedOutputFile, actualOutputFile);
 	}

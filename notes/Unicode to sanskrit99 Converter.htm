@@ -1,0 +1,364 @@
+﻿<html>
+<!-- from: https://groups.google.com/forum/#!searchin/technical-hindi/sanskrit99/technical-hindi/UxpSbys29vI/KnHZIkMyRyQJ -->
+<head>यूनिकोड से संस्कृत९९ फाण्ट  परिवर्तित्र (5-1-2008 08:15) </title>
+
+
+<script type="text/javascript">
+
+function convert_Unicode_to_Sanskrit99()
+{
+
+var array_one = new Array( 
+
+// A dot (ALT 0183) remains dot only. It doesn't change.
+//
+// In the following commented characters for adding "्र", use full form of the original and put +
+//"झ्र","ट्र","ठ्र","ड्र","ढ्र","ण्र","थ्र","ल्र","ष्र",
+
+"हृ","ह्न","ह्म","ह्य","ह्र","ह्ल","ह्व","ह्ण",
+"क्र","ख्र","ग्र","घ्र","छ्र","ज्र","दृ","ट्र","ड्र","ढ्र",
+"त्र्","त्र","द्र","ध्र","न्र","प्र","ब्र","भ्र","म्र","व्र","श्र","स्र","स्त्र",
+"क्क","ष्ट","ष्ठ","द्ध","द्घ","प्त","ज्ञ","क्ष्","क्ष","द्व","क्त","न्न", "ट्ट","द्द","द्ग","द्भ",
+"ङ्क","ङ्ग","ञ्च","ञ्ज","ऽ",".","त्त्","त्त","ङ्क्त","ल्ल","द्य","्य",
+"कु","कू","ङु","ङू","दु","दू","फु","फू","रु","रू","हु","हू",
+
+"क़्","ख़्","ग़्","ज़्","फ़्","क़","ख़","ग़","ज़","ड़","ढ़","फ़",
+// "क़्","ख़्","ग़्","ज़्","फ़्","क़","ख़","ग़","ज़","ड़","ढ़","फ़", 
+
+"क्","ख्","ग्","घ्","क","ख","ग","घ","ङ",
+"च्","ज्","ञ्","च","छ","ज","झ","ञ",
+
+"ट","ठ","ड","ढ","ण्","ण",
+"त्","थ्","ध्","न्","त","थ","द","ध","न",
+
+"प्","फ्","ब्","भ्","म्","प","फ","ब","भ","म",
+"य्","ल्","व्","श्","ष्","स्","य","र","ल","ळ","व","श","ष","स","ह",
+
+"ऐ", "ए", "ओ", "औ","ऑ","आ","अ","इ","ई","उ","ऊ","ऋ","ॠ","ऌ","ॡ", "कॢ",
+"ो", "ौ", "ॉ","ा","ी","ु",  "ू", "ृ",  "ॄ", "े", "ै",     
+"ँ", "ं", "ः", "्","़","।","॒","॑",
+"र्ं",
+
+"०",  "१",  "२",   "३",   "४",  "५", "६",  "७",  "८",  "९" )
+
+var array_two = new Array( 
+
+// In the following characters for adding "्र", use full form of the original and put +
+// "H+","q+","Q+","f+","F+","[+","w+","l+",";+",
+
+"ù","û","ü","ý","ÿ","’","þ","Ÿ",
+"³","µ","¢","º","À","¿","†","q+","f+","F+",
+"È","Ç","Ô","Ø","Ü","à","ä","æ","è","ì","ï","ö","ô",
+"Š","ò","ó","Ï","˜","Ý","}","ú","]","Ö","´","Ú", "”","Î","Ì","Ñ",
+"»","¼","Â","Ã","=","•", "Å","Ä","“","‘","*","(",
+"k…","kª","'…", "'ª", "Ê","Ë",")…", ")ª","é","ê","÷","ø",
+
+"ˆK","ˆO","ˆG","ˆJ","ˆá", "ˆk","ˆo","ˆg","ˆj","–f","–F","ˆ)",
+// "ˆK","ˆO","ˆG","ˆJ","ˆá", "ˆk","ˆo","ˆg","ˆj","–f","–F","ˆ)",
+
+
+"K","O","G","¸", "k", "o", "g", "\"", "'",
+"C","J","Á","c","D","j","H","|",
+
+"q","Q","f","F","{","[", 
+"T","W","X","N","t","w","d","x","n",
+      
+"P","á","B","_","M","p",")","b","É","m",
+"Y","L","V","Z",":","S","y","r","l","¦","v","z",";","s","h",
+
+"@e","@","Aae","AaE","Aa£","Aa","A", "#","$","%","^", "\\", "§",   "¤","¥", "„", 
+"ae", "aE", "a£", "a",  "I",  "u",  "U",  "«",  "©",  "e",  "E",     
+"~", "<",  ">",  "!", "ˆ",",", "/","?",
+"¡",
+
+"0", "1", "2", "3", "4", "5","6", "7", "8", "9")
+
+
+var array_one_length = array_one.length ;
+
+// if the input is plain text
+
+if ((document.getElementById("text_or_html")).selectedIndex == 0 )  
+   {
+    document.getElementById("unicode_text").value = "You have chosen SIMPLE TEXT in Sanskrit99 font to convert into Unicode. Conversion in progress.."  ;  
+
+    var modified_substring = document.getElementById("legacy_text").value  ;
+
+    Replace_Symbols( ) ;
+
+    var processed_text = modified_substring ;
+
+    processed_text = processed_text.replace( /mangal/g , "Sanskrit 99" ) ;   
+
+    document.getElementById("unicode_text").value = processed_text  ;
+   }
+
+
+// if input is HTML then
+
+else    
+   {
+    document.getElementById("unicode_text").value = "You have chosen HTML TEXT in Sanskrit99 font to convert into Unicode. Conversion in progress.."  ;  
+
+    var remaining_text = document.getElementById("legacy_text").value ;
+    var processed_text = "" ;  //blank initially
+
+    var position_of_current_opening_bracket = 0 ;
+    var position_of_next_closing_bracket = 1 ;
+
+    // search starting from paragraphs. then search for sanskrit 99.
+    var idx = remaining_text.indexOf( "<p " )  
+    idx = remaining_text.indexOf( "Sanskrit 99" , idx )
+    var idx2 = 0  //  position_of_current_opening_bracket  ">"
+    var idx3 = 0  //  position of "/span"
+    var idx4 = 0  //  postion of "span" only , ie span without "/"
+
+    while ( idx != -1 )    // while-01 loop     ;  while "Sanskrit 99"  is found..
+       {  
+        idx2 = remaining_text.indexOf( ">" , idx )  
+        idx3 = remaining_text.indexOf( "/span" , idx2 )
+        idx4 = remaining_text.indexOf( "span" , idx2 )
+
+        while ( idx4 < idx3 )     // this loop to take care of  nested span.
+           {
+            idx4 = remaining_text.indexOf( "span" , idx3+4 ) ;
+            idx3 = remaining_text.indexOf( "/span" , idx3+4 ) ;
+           }
+
+        var modified_substring = remaining_text.substring( idx2 , idx3 ) ;
+        modified_substring = modified_substring.replace( />/g , ">>" ) ; 
+        processed_text = processed_text + remaining_text.substring( 0 , idx2 ) + modified_substring + "/span" ;   
+
+        remaining_text = remaining_text.substring( idx3 + 5 ) ;  //remaining_text excludes "/span"
+        idx = remaining_text.indexOf( "Sanskrit 99" ) ;
+       } //end of outermost while-01
+
+    processed_text = processed_text + remaining_text ;
+
+    //-----------------------------
+
+    //This section for taking care of paragraphs marked class = MsoBodyText  or class = MsoBodyText
+
+    remaining_text = processed_text ;
+    processed_text = "" ;  //blank initially
+
+    var position_of_start_of_paragraph = 0 ;
+    var position_of_end_of_paragraph = 1 ;
+
+    position_of_start_of_paragraph = remaining_text.indexOf("<p ")   ;
+
+    while ( position_of_start_of_paragraph != -1 )  //search for <p  in the remaining_text
+       {
+        position_of_start_of_paragraph = remaining_text.indexOf("<p ")   ;
+        position_of_end_of_paragraph = remaining_text.indexOf("/p>")   ;
+
+        modified_substring = remaining_text.substring( position_of_start_of_paragraph + 3 ,  position_of_end_of_paragraph ) ;
+
+        if (modified_substring.indexOf( "MsoBodyText" ) != -1 )
+           { 
+            // repace all ">" with ">>" in this paragraph
+            modified_substring = modified_substring.replace( />/g , ">>" )  ;    
+
+            // in Mybodytext, wherever font-family is found, it means it is roman text.
+            idx = modified_substring.indexOf("font-family")  ;  
+
+            idx2 = 0 ;  // position of ">>"
+            idx3 = 0 ;  // position of "/span"
+            idx4 = 0 ;  // position of "span" only without "/"
+
+            // again change ">>" to ">" only those which occur immediately after font-family:"Times New Roman"
+            while ( idx != -1 )     
+               {
+                idx2 = modified_substring.indexOf( ">>" , idx ) ;
+                idx3 = modified_substring.indexOf( "/span" , idx2 ) ;
+                idx4 = modified_substring.indexOf( "span" , idx2 ) ;
+
+                while ( idx4 < idx3 )
+                   {
+                    idx4 = modified_substring.indexOf( "span" , idx3+4 )  ;
+                    idx3 = modified_substring.indexOf( "/span" , idx3+4 )  ;
+                   }
+
+                modified_substring = modified_substring.substring( 0, idx2 ) + (modified_substring.substring( idx2 , idx3 )).replace( />>/g , ">" ) + modified_substring.substring( idx3 ) ; 
+                idx = modified_substring.indexOf( "font-family" , idx3 ) ;
+
+               } // end of while inner loop
+           } // end of if statement
+
+        processed_text = processed_text + remaining_text.substring( 0 , position_of_start_of_paragraph + 3 ) +  modified_substring + "/p>" ;   
+        remaining_text = remaining_text.substring( position_of_end_of_paragraph + 3 ) ; 
+        position_of_start_of_paragraph = remaining_text.indexOf("<p ")   ;
+       } // end of outer while loop
+
+    processed_text = processed_text + remaining_text ;
+
+    //------------------------
+
+    // Now do actual font conversion  of text occuring between  all the  pairs  >>  and  <
+
+    remaining_text = processed_text ;     processed_text = "" ; 
+
+    idx2 = remaining_text.indexOf( ">>" )  ;
+
+    while ( idx2 != -1 )    // while-01 loop (checks if ">>" is still present
+       {  
+        position_of_current_opening_bracket = remaining_text.indexOf( ">>" , idx2 )  
+        position_of_next_closing_bracket = remaining_text.indexOf( "<" , position_of_current_opening_bracket )
+
+        modified_substring = remaining_text.substring( position_of_current_opening_bracket + 2 , position_of_next_closing_bracket ) ;
+
+        processed_text = processed_text + remaining_text.substring( 0 , position_of_current_opening_bracket + 1 ) ;   // ">" included by using +1 here
+        remaining_text = remaining_text.substring( position_of_next_closing_bracket + 1 ) ;  //remaining_text excludes the closing bracket
+
+        // call the subroutine and replace the legacy symbols with corresponding Unicode.
+     
+        Replace_Symbols() ;   
+
+        processed_text = processed_text + modified_substring + "<"  ;
+
+        idx2 = remaining_text.indexOf( ">>" ) ;
+       } //end of outermost while-01
+
+    processed_text = processed_text + remaining_text ; 
+
+    // change  font name from 'Mangal'  to  'Sanskrit99' .
+ 
+    processed_text = processed_text.replace( /Mangal/g , "Sanskrit99" ) ;   
+
+    // now put the processed text in the output box finally.
+
+    document.getElementById("unicode_text").value = processed_text  
+
+   } // end of else loop for HTML case
+
+//**************************************************
+//--------------------------------------------------
+//**************************************************
+
+function Replace_Symbols( )
+   {
+    // if string to be converted is non-blank then no need of any processing.
+    if (modified_substring != "" )  
+       {
+
+// first replace the two-byte nukta_varNa with corresponding one-byte nukta varNas.
+
+modified_substring = modified_substring.replace ( /क़‌‌/g , "क़" )  ; 
+modified_substring = modified_substring.replace ( /ख़‌/g , "ख़" )  ;
+modified_substring = modified_substring.replace ( /ग़‌/g , "ग़" )  ;
+modified_substring = modified_substring.replace ( /ज़‌/g , "ज़" )  ;
+modified_substring = modified_substring.replace ( /ड़‌/g , "ड़" )  ;
+modified_substring = modified_substring.replace ( /ढ़‌/g , "ढ़" )  ;
+modified_substring = modified_substring.replace ( /ऩ‌/g , "ऩ" )  ;
+modified_substring = modified_substring.replace ( /फ़‌/g , "फ़" )  ;
+modified_substring = modified_substring.replace ( /य़‌/g , "य़" )  ;
+modified_substring = modified_substring.replace ( /ऱ‌/g , "ऱ" )  ;
+
+
+        // code for replacing "ि" (chhotee ee kii maatraa) with "i"  and correcting its position too.
+        
+        var position_of_f = modified_substring.indexOf( "ि" )  ;
+         while ( position_of_f != -1 )  //while-02
+           {
+            var character_left_to_f = modified_substring.charAt( position_of_f - 1 )  ;
+            modified_substring = modified_substring.replace( character_left_to_f + "ि" ,  "i" + character_left_to_f )  ;
+
+            position_of_f = position_of_f - 1  ;
+
+            while (( modified_substring.charAt( position_of_f - 1 ) == "्" )  &  ( position_of_f != 0  ) )
+               {
+                var string_to_be_replaced = modified_substring.charAt( position_of_f - 2 ) + "्"  ;
+                  modified_substring = modified_substring.replace( string_to_be_replaced + "i", "i" + string_to_be_replaced ) ;
+
+                position_of_f = position_of_f - 2  ;
+               }
+            position_of_f = modified_substring.search( /ि/ , position_of_f + 1 ) ; // search for f ahead of the current position.
+
+           } // end of while-02 loop
+   //************************************************************     
+   //     modified_substring = modified_substring.replace( /fर्/g , "£"  )  ;
+   //************************************************************     
+        // Eliminating "र्" and putting  Z  at proper position for this.
+
+       set_of_matras = "ािीुूृेैोौं:ँॅ" 
+
+modified_substring += '  '    ;  // add two spaces after the string to avoid UNDEFINED char in the following code.
+
+       var position_of_half_R = modified_substring.indexOf( "र्" ) ;
+        while ( position_of_half_R > 0  )  // while-04
+           {
+            // "र्"  is two bytes long
+            var probable_position_of_Z = position_of_half_R + 2   ;  
+
+            var character_right_to_probable_position_of_Z = modified_substring.charAt( probable_position_of_Z + 1 )
+
+            // trying to find non-maatra position right to probable_position_of_Z .
+
+            while ( set_of_matras.indexOf( character_right_to_probable_position_of_Z ) != -1 )  
+               {
+                probable_position_of_Z = probable_position_of_Z + 1 ;
+                character_right_to_probable_position_of_Z = modified_substring.charAt( probable_position_of_Z + 1 ) ;
+               } // end of while-05
+
+            string_to_be_replaced = modified_substring.substr ( position_of_half_R + 2 , ( probable_position_of_Z - position_of_half_R - 1 ))  ;
+            modified_substring = modified_substring.replace( "र्" + string_to_be_replaced  ,  string_to_be_replaced + "R" ) ;
+            position_of_half_R = modified_substring.indexOf( "र्" ) ;
+           } // end of while-04
+
+
+modified_substring = modified_substring.substr ( 0 , modified_substring.length - 2 )  ;
+
+
+
+        //substitute array_two elements in place of corresponding array_one elements
+
+        for( input_symbol_idx = 0; input_symbol_idx < array_one_length; input_symbol_idx++ )
+           {
+            idx = 0  ;  // index of the symbol being searched for replacement
+
+            while (idx != -1 ) //whie-00
+               {
+                modified_substring = modified_substring.replace( array_one[ input_symbol_idx ] , array_two[input_symbol_idx] )
+                idx = modified_substring.indexOf( array_one[input_symbol_idx] )
+               } // end of while-00 loop
+           } // end of for loop
+
+        } // end of IF  statement  meant to  supress processing of  blank  string.
+
+    } // end of the function  Replace_Symbols( )
+
+  } // end of Convert_Unicode_to_Sanskrit99 function
+
+
+</script>
+</head>
+
+<!-- ----------------------------------------------------------------------------------
+      body of the HTML starts here. one text box is provided each for input and output. 
+-->
+
+<body>
+<form name="form1">
+
+Put the UNICODE text (plain text or HTML text) in the box below : <br/><br/>
+
+<textarea name="TextToConvert" id="legacy_text" cols="80" rows="7"></textarea> <br><br>
+
+The input given in the above box is : 
+<div > <select id="text_or_html">
+<option>Plain TEXT</option>
+<option>HTML TEXT</option>
+</select> </div> 
+
+<div align="middle">
+<input  type="button" id="converter" name="converter" value=" Convert to Sanskrit99 font >> " onClick="convert_Unicode_to_Sanskrit99();" accesskey="c" title="शॉर्टकट alt+c"> 
+</div>  <br><br>
+
+The above text converted to Sanskrit99 font is shown in the box below : <br/><br>
+<textarea name="ConvertedText" id="unicode_text" cols="100" rows="13"></textarea>
+<br /><br />
+
+</form>
+</body>
+
+</html>

@@ -12,7 +12,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -21,7 +20,7 @@ public class Sanskrit99ToUnicodeConverter extends Text2UnicodeConverter {
 
 	private static final String JAVASCRIPT_METHOD_NAME = "convert_to_unicode";
 	private static final String SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILENAME = "sanskrit99_to_unicode.js";
-	private static final Logger logger = LoggerFactory.getLogger(Sanskrit99ToUnicodeConverter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Sanskrit99ToUnicodeConverter.class);
 
 	private final ClassPathResource classPathResource = new ClassPathResource(SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILENAME);
 
@@ -56,32 +55,32 @@ public class Sanskrit99ToUnicodeConverter extends Text2UnicodeConverter {
 		} catch (ScriptException e) {
 			String errorMsg = String.format("Catastrophic error! Problem loading Javascript file [%s]. Please check the file for errors.",
 					SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILENAME) + "\n" + e.getStackTrace().toString();
-			logger.error(errorMsg);
+			LOGGER.error(errorMsg);
 			throw new IllegalStateException(errorMsg, e);
 		} catch (NoSuchMethodException e) {
 			String errorMsg = String
 					.format("Catastrophic error! Cannot find method [%s] on the Javascript file [%s]. Cannot continue; please check if the file is corrupt or has recently changed.",
 							JAVASCRIPT_METHOD_NAME, SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILENAME)
 					+ "\n" + e.getStackTrace().toString();
-			logger.error(errorMsg);
+			LOGGER.error(errorMsg);
 			throw new IllegalStateException(errorMsg, e);
 		} catch (FileNotFoundException e) {
 			// final ClassPathResource classPathResource = new
 			// ClassPathResource(SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILE);
 			String errorMsg = String.format("Catastrophic error! File [{}] is not a file or does not exist.", classPathResource) + "\n"
 					+ e.getStackTrace().toString();
-			logger.error(errorMsg);
+			LOGGER.error(errorMsg);
 			throw new IllegalStateException(errorMsg, e);
 		} catch (IOException e) {
 			String errorMsg = String
 					.format("Catastrophic error! Resource [{}] cannot be resolved as absolute file path. Is the resource available on the file system?",
 							classPathResource)
 					+ "\n" + e.getStackTrace().toString();
-			logger.error(errorMsg);
+			LOGGER.error(errorMsg);
 			throw new IllegalStateException(errorMsg, e);
 		}
 
-		logger.debug("Input [{}] --> Output [{}]", input, output);
+		LOGGER.debug("Input [{}] --> Output [{}]", input, output);
 		return output;
 	}
 

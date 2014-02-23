@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 
 public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 
-	private static final Logger logger = LoggerFactory.getLogger(PalladioIT2UnicodeConverter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PalladioIT2UnicodeConverter.class);
 
 	// certain replacements have to occur in order, so used an LINKED hash map
 	// (ordered by insert order)
@@ -18,6 +18,10 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 	
 	private Map<String, String> postReplacementCorrections = new HashMap<String, String>();
 
+	public PalladioIT2UnicodeConverter() {
+		initializeMappings();
+	}
+	
 	/**
 	 * Converts PalladioIT input to Unicode output.
 	 * 
@@ -38,7 +42,7 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 		// that might have been incorrectly changed
 		output = performSpecialPostReplacementCorrections(output);
 
-		logger.debug("Converted input [{}] to unicode output [{}]", input, output);
+		LOGGER.debug("Converted input [{}] to unicode output [{}]", input, output);
 		return output;
 	}
 
@@ -48,12 +52,11 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 			String to = postReplacementCorrections.get(from);
 			correctedOutput = StringUtils.replace(output, from, to);
 		}
-		logger.debug("Performed post replacements corrections on [{}] to [{}]", output, correctedOutput);
+		LOGGER.debug("Performed post replacements corrections on [{}] to [{}]", output, correctedOutput);
 		return correctedOutput;
 	}
 
-	// initialize mapping
-	{
+	private void initializeMappings() {
 		// @formatter:off
 		// 			IT code point, 	Unicode code point 	// Unicode character to convert to
 		
