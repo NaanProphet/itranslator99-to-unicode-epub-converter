@@ -1,4 +1,4 @@
-package org.dontexist.kb;
+package org.dontexist.kb.util;
 
 /*
  Create Zip File From Directory using ZipOutputStream Example
@@ -18,14 +18,19 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class CreateZipFileDirectory {
+public class CreateZipFileDirectoryUtil {
 
-	private static String metaFolder = "META-INF";
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateZipFileDirectoryUtil.class);
+	
+	private static final String MIMETYPE = "mimetype";
+	private static final String UTF8_CHARSET = "UTF-8";
+	private static final String EPUB_MIME_CONTENT = "application/epub+zip";
+	private static final String metaFolder = "META-INF";
 
 	public static void main(final String zipFile, final String sourceDirectory) throws IOException {
-		// String zipFile = "C:/FileIO/zipdemo.zip";
-		// String sourceDirectory = "C:/examples";
 
 		// create byte buffer
 		byte[] buffer = new byte[1024];
@@ -51,7 +56,7 @@ public class CreateZipFileDirectory {
 
 		// check to see if this directory exists
 		if (!dir.isDirectory()) {
-			System.out.println(sourceDirectory + " is not a directory");
+			LOGGER.debug(sourceDirectory + " is not a directory");
 		} else {
 			File[] files = dir.listFiles();
 			for (int i = 0; i < files.length; i++) {
@@ -59,7 +64,7 @@ public class CreateZipFileDirectory {
 					String folderName = StringUtils.remove(files[i].getName(), sourceDirectory);
 					addFilesToZip(buffer, zout, files[i].listFiles(), folderName);
 				} else {
-					System.out.println(files[i].getName());
+					LOGGER.debug(files[i].getName());
 					addFileToZip(buffer, zout, files[i], "");
 				}
 			}
@@ -69,13 +74,13 @@ public class CreateZipFileDirectory {
 		// close the ZipOutputStream
 		zout.close();
 
-		System.out.println("Zip file has been created!");
+		LOGGER.debug("Zip file has been created!");
 
 	}
 
 	private static void writeMimeType(ZipOutputStream zip) throws IOException {
-		byte[] content = "application/epub+zip".getBytes("UTF-8");
-		ZipEntry entry = new ZipEntry("mimetype");
+		byte[] content = EPUB_MIME_CONTENT.getBytes(UTF8_CHARSET);
+		ZipEntry entry = new ZipEntry(MIMETYPE);
 		entry.setMethod(ZipEntry.STORED);
 		entry.setSize(20);
 		entry.setCompressedSize(20);
@@ -83,33 +88,57 @@ public class CreateZipFileDirectory {
 		zip.putNextEntry(entry);
 		zip.write(content);
 		zip.closeEntry();
-		System.out.println("Successfully wrote mimetype");
+		LOGGER.debug("Successfully wrote mimetype");
 	}
 	
-	private static void writeMeta(ZipOutputStream zip) throws UnsupportedEncodingException, IOException {
+	/**
+	 * 
+	 * @param zip
+	 * @throws UnsupportedEncodingException (subclass of IOException)
+	 * @throws IOException
+	 */
+	private static void writeMeta(ZipOutputStream zip) throws IOException {
 		ZipEntry entry = new ZipEntry(metaFolder+File.separator+"container.xml");
 		zip.putNextEntry(entry);
-	    zip.write("<?xml version=\"1.0\"?>\r\n".getBytes("UTF-8"));
-	    zip.write("<container version=\"1.0\" xmlns=\"urn:oasis:names:tc:opendocument:xmlns:container\">\r\n".getBytes("UTF-8"));
-	    zip.write("<rootfiles>\r\n".getBytes("UTF-8"));
-	    zip.write("<rootfile full-path=\"content.opf\" media-type=\"application/oebps-package+xml\"/>\r\n".getBytes("UTF-8"));
-	    zip.write("</rootfiles>\r\n".getBytes("UTF-8"));
-	    zip.write("</container>\r\n".getBytes("UTF-8"));
+	    zip.write("<?xml version=\"1.0\"?>\r\n".getBytes(UTF8_CHARSET));
+	    zip.write("<container version=\"1.0\" xmlns=\"urn:oasis:names:tc:opendocument:xmlns:container\">\r\n".getBytes(UTF8_CHARSET));
+	    zip.write("<rootfiles>\r\n".getBytes(UTF8_CHARSET));
+	    zip.write("<rootfile full-path=\"content.opf\" media-type=\"application/oebps-package+xml\"/>\r\n".getBytes(UTF8_CHARSET));
+	    zip.write("</rootfiles>\r\n".getBytes(UTF8_CHARSET));
+	    zip.write("</container>\r\n".getBytes(UTF8_CHARSET));
 	    zip.closeEntry();
 	}
 
-	private static void addFilesToZip(byte[] buffer, ZipOutputStream zout, File[] files, String folderName) throws FileNotFoundException, IOException {
+	/**
+	 * 
+	 * @param buffer
+	 * @param zout
+	 * @param files
+	 * @param folderName
+	 * @throws FileNotFoundException (subclass of IOException)
+	 * @throws IOException
+	 */
+	private static void addFilesToZip(byte[] buffer, ZipOutputStream zout, File[] files, String folderName) throws IOException {
 		for (int i = 0; i < files.length; i++) {
 			addFileToZip(buffer, zout, files[i], folderName);
 		}
 	}
 
-	private static void addFileToZip(byte[] buffer, ZipOutputStream zout, File file, String folderName) throws FileNotFoundException, IOException {
-		if (StringUtils.contains(file.getName(), "mimetype") || StringUtils.contains(file.getName(), "container.xml")) {
-			System.out.println("Skipping " + file.getName());
+	/**
+	 * 
+	 * @param buffer
+	 * @param zout
+	 * @param file
+	 * @param folderName
+	 * @throws FileNotFoundException (subclass of IOException)
+	 * @throws IOException
+	 */
+	private static void addFileToZip(byte[] buffer, ZipOutputStream zout, File file, String folderName) throws IOException {
+		if (StringUtils.contains(file.getName(), MIMETYPE) || StringUtils.contains(file.getName(), "container.xml")) {
+			LOGGER.debug("Skipping " + file.getName());
 			return;
 		}
-		System.out.println("Adding " + file.getName());
+		LOGGER.debug("Adding " + file.getName());
 
 		// create object of FileInputStream for source file
 		FileInputStream fin = new FileInputStream(file);

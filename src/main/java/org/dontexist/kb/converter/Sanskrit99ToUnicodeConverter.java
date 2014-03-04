@@ -65,8 +65,6 @@ public class Sanskrit99ToUnicodeConverter extends Text2UnicodeConverter {
 			LOGGER.error(errorMsg);
 			throw new IllegalStateException(errorMsg, e);
 		} catch (FileNotFoundException e) {
-			// final ClassPathResource classPathResource = new
-			// ClassPathResource(SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILE);
 			String errorMsg = String.format("Catastrophic error! File [{}] is not a file or does not exist.", classPathResource) + "\n"
 					+ e.getStackTrace().toString();
 			LOGGER.error(errorMsg);

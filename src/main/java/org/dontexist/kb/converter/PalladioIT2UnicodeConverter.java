@@ -15,13 +15,13 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 	// certain replacements have to occur in order, so used an LINKED hash map
 	// (ordered by insert order)
 	private Map<Character, Character> it2UnicodeMap = new LinkedHashMap<Character, Character>();
-	
+
 	private Map<String, String> postReplacementCorrections = new HashMap<String, String>();
 
 	public PalladioIT2UnicodeConverter() {
 		initializeMappings();
 	}
-	
+
 	/**
 	 * Converts PalladioIT input to Unicode output.
 	 * 
@@ -57,6 +57,7 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 	}
 
 	private void initializeMappings() {
+		// @sonar:ofs
 		// @formatter:off
 		// 			IT code point, 	Unicode code point 	// Unicode character to convert to
 		
@@ -100,8 +101,8 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 		addToMap(	0x00DE, 		0x0331); 			// Þ -> Vedik accent _
 		addToMap(	0x00F7, 		0x030E); 			// ÷ -> Vedik accent ''
 		// @formatter:on
-		
-		
+		// @sonar:on
+
 		// ---- POST REPLACEMENT CORRECTION MAPPINGS
 		postReplacementCorrections.put("fiancī", "fiancé");
 	}

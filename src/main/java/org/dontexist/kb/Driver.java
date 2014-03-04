@@ -13,6 +13,9 @@ public class Driver {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Driver.class);
 
+	private Driver() {
+	}
+
 	public static void main(String[] args) throws ZipException, IOException {
 		final ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/app-context.xml");
 		LOGGER.debug("Spring context initialized.");

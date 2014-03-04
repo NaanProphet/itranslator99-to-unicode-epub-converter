@@ -10,14 +10,13 @@ import javax.swing.JFileChooser;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dontexist.kb.converter.PalladioIT2UnicodeConverter;
 import org.dontexist.kb.converter.Sanskrit99ToUnicodeConverter;
+import org.dontexist.kb.util.CreateZipFileDirectoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -44,7 +43,6 @@ public class SpringDriver implements InitializingBean {
 		// --------- GET ALL FILES ---------
 
 		Collection<File> epubsToConvert = drillDownFolderForAllEpubFiles(folder);
-		// drillDownFolderForAllHtmlFiles(folder);
 
 		for (File ithEpub : epubsToConvert) {
 
@@ -75,20 +73,11 @@ public class SpringDriver implements InitializingBean {
 				StringBuilder convertedFileAsString = convertFileToUnicode(ithFile);
 
 				// overwrite file, since we created a new folder
-				// File ofile = new
-				// File(ithFile.getAbsolutePath().replace(".html",
-				// StringUtils.EMPTY) + "-new.html");
 				FileUtils.writeStringToFile(ithFile, convertedFileAsString.toString(), "UTF8");
 			}
 
 			// ---------- ZIP UP NEW EPUB ----------
-			// ZipFile newEpubFile = new ZipFile(unzipFolderDestination +
-			// ".epub");
-			// ZipParameters parameters = new ZipParameters();
-			// parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
-			// parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_MAXIMUM);
-			// newEpubFile.addFolder(unzipFolderDestination, parameters);
-			CreateZipFileDirectory.main(unzipFolderDestination + ".epub", unzipFolderDestination);
+			CreateZipFileDirectoryUtil.main(unzipFolderDestination + ".epub", unzipFolderDestination);
 		}
 
 	}
