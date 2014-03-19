@@ -10,20 +10,23 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import junit.framework.Assert;
-
 import nl.siegmann.epublib.domain.Book;
+import nl.siegmann.epublib.domain.MediaType;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.epub.EpubWriter;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class EpublibTest {
 
-	public static final String EPUB_FOLDER = "src/test/java/org/dontexist/kb/misc/";
+	private static final String EPUB_TEXT_FOLDER = "text";
+	private static final String EPUB_FILE_ENCODING = "UTF-8";
+	public static final String EPUB_FOLDER = "src/test/resources/org/dontexist/kb/";
 	public static final String FILENAME_IN = EPUB_FOLDER + "test.epub";
 	public static final String FILENAME_OUT = EPUB_FOLDER + "output.test.epub";
 	
@@ -33,7 +36,12 @@ public class EpublibTest {
 	@Before
 	public void setUp() {
 		// delete output file if exists
-		new File(FILENAME_OUT).delete();
+		File outputFile = new File(FILENAME_OUT);
+		outputFile.delete();
+		
+		// comment out deleteOnExit to keep output file for verification
+		outputFile.deleteOnExit();
+		
 		epubReader = new EpubReader();
 		epubWriter = new EpubWriter();
 	}
@@ -47,17 +55,18 @@ public class EpublibTest {
 	}
 	
 	@Test
-	@Ignore
 	public void test() throws Exception {
 		EpubReader epubReader = new EpubReader();
-		Book bookIn = epubReader.readEpub(new FileInputStream("src/test/java/org/dontexist/kb/misc/test.epub"));
+		Book bookIn = epubReader.readEpub(new FileInputStream(FILENAME_IN));
 		List<Resource> x = bookIn.getContents();
 		for (Resource ithX : x) {
-			String href = ithX.getHref();
-			if (href.contains("text")) {
-				System.out.println(href);
+			String qualifiedFilename = ithX.getHref();
+			MediaType mediaType = ithX.getMediaType();
+			// see MediatypeService for list of allowable MediaType s
+			System.out.println(qualifiedFilename + " of media type " + mediaType);
+			if (qualifiedFilename.contains(EPUB_TEXT_FOLDER)) {
 				InputStream myInputStream = ithX.getInputStream();
-				String myString = IOUtils.toString(myInputStream, "UTF-8");
+				String myString = IOUtils.toString(myInputStream, EPUB_FILE_ENCODING);
 				System.out.println(myString);
 				ithX.setData("hi".getBytes());
 			}
@@ -110,7 +119,7 @@ public class EpublibTest {
 	}
 
 	private void writeMimeType(ZipOutputStream zip) throws IOException {
-		byte[] content = "application/epub+zip".getBytes("UTF-8");
+		byte[] content = "application/epub+zip".getBytes(EPUB_FILE_ENCODING);
 		ZipEntry entry = new ZipEntry("mimetype");
 		entry.setMethod(ZipEntry.STORED);
 		entry.setSize(20);

@@ -1,4 +1,4 @@
-package org.dontexist.kb.converter;
+package org.dontexist.kb.service;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -6,11 +6,13 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
+@Service
+public class PalladioIT2UnicodeConverterServiceImpl extends AbstractText2UnicodeService implements PalladioIT2UnicodeConverterService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PalladioIT2UnicodeConverter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PalladioIT2UnicodeConverterServiceImpl.class);
 
 	// certain replacements have to occur in order, so used an LINKED hash map
 	// (ordered by insert order)
@@ -18,7 +20,7 @@ public class PalladioIT2UnicodeConverter extends Text2UnicodeConverter {
 
 	private Map<String, String> postReplacementCorrections = new HashMap<String, String>();
 
-	public PalladioIT2UnicodeConverter() {
+	public PalladioIT2UnicodeConverterServiceImpl() {
 		initializeMappings();
 	}
 

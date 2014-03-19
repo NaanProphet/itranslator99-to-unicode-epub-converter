@@ -1,13 +1,14 @@
-package org.dontexist.kb.converter;
+package org.dontexist.kb.service;
 
 import junit.framework.Assert;
 
+import org.dontexist.kb.service.JavascriptSanskrit99ToUnicodeServiceImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class Sanskrit99ToUnicodeConverterTest {
+public class JavascriptSanskrit99ToUnicodeServiceImplTest {
 
-	private Sanskrit99ToUnicodeConverter converter = new Sanskrit99ToUnicodeConverter();
+	private JavascriptSanskrit99ToUnicodeServiceImpl converter = new JavascriptSanskrit99ToUnicodeServiceImpl();
 
 	// ----------- HELPER METHODS --------------------
 

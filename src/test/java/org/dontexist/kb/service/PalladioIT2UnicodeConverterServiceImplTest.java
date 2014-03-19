@@ -1,14 +1,14 @@
-package org.dontexist.kb.converter;
+package org.dontexist.kb.service;
 
 import junit.framework.Assert;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.dontexist.kb.converter.PalladioIT2UnicodeConverter;
+import org.dontexist.kb.service.PalladioIT2UnicodeConverterServiceImpl;
 import org.junit.Test;
 
-public class PalladioIT2UnicodeConverterTest {
+public class PalladioIT2UnicodeConverterServiceImplTest {
 
-	private PalladioIT2UnicodeConverter converter = new PalladioIT2UnicodeConverter();
+	private PalladioIT2UnicodeConverterServiceImpl converter = new PalladioIT2UnicodeConverterServiceImpl();
 
 	// ----------- HELPER METHODS --------------------
 

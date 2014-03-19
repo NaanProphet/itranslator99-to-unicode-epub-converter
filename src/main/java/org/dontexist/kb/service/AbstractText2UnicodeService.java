@@ -1,4 +1,4 @@
-package org.dontexist.kb.converter;
+package org.dontexist.kb.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-public abstract class Text2UnicodeConverter {
+public abstract class AbstractText2UnicodeService {
 
 	public abstract String convert(String input);
 
