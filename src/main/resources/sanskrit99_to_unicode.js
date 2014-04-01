@@ -6,6 +6,10 @@ function convert_to_unicode(input_text) {
 	var array_one = new Array(
 
 	"ß", "ë", "å", "ã", "â", "Þ", "Û", "×", "Ò", "Ð", "Í", "²", "±", "°", "Q+", // additions missing from original
+	
+	// special control character additions BEGIN
+	
+	"", // 159
 			
 	"`", "ç", "ð", "¬", "ñ", "Õ", "¶", "í", "¹", "¾", "Æ", "Ó", "Ù",
 
@@ -33,6 +37,10 @@ function convert_to_unicode(input_text) {
 	var array_two = new Array(
 			
 	"प्न", "व्न", "भ्न", "ब्न", "ब्ज", "प्त्", "न्न्", "ध्न", "द्म", "द्न", "द्ग्र", "क्न", "न्क्र", "ॄ", "ठ्र", // matching additions pair
+	
+	// // matching special additions pair BEGIN
+	
+	"ह्ण", 
 
 	"ॐ", "म्न", "श्ल", "क्ल", "श्व", "द्र्य", "ग्न", "श्च", "घ्न", "ज्ज", "त्न", "द्ब", "न्त्र",
 

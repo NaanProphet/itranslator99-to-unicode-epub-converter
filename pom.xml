@@ -72,7 +72,7 @@
 			<groupId>org.springframework.batch</groupId>
 			<artifactId>spring-batch-test</artifactId>
 			<version>2.1.9.RELEASE</version>
-			<scope>test</scope>
+			<!-- <scope>test</scope> -->
 		</dependency>
 
 		<!-- check out epublib locally to force latest build -->
@@ -91,13 +91,6 @@
 			<groupId>xpp3</groupId>
 			<artifactId>xpp3_min</artifactId>
 			<version>1.1.4c</version>
-		</dependency>
-
-		<!-- For FindBugs SupressWarning annotation for Sonar -->
-		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>annotations</artifactId>
-			<version>2.0.3</version>
 		</dependency>
 
 

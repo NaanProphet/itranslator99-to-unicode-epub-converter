@@ -23,158 +23,172 @@ import org.slf4j.LoggerFactory;
 
 public class CreateZipFileDirectoryUtils {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CreateZipFileDirectoryUtils.class);
-	
-	private static final String MIMETYPE = "mimetype";
-	private static final String UTF8_CHARSET = "UTF-8";
-	private static final String EPUB_MIME_CONTENT = "application/epub+zip";
-	private static final String metaFolder = "META-INF";
+    private static final Logger LOGGER = LoggerFactory.getLogger(CreateZipFileDirectoryUtils.class);
 
-	public static void main(final String zipFile, final String sourceDirectory) throws IOException {
+    private static final String MIMETYPE = "mimetype";
+    private static final String UTF8_CHARSET = "UTF-8";
+    private static final String EPUB_MIME_CONTENT = "application/epub+zip";
+    private static final String META_FOLDER = "META-INF";
+    private static final String CONTAINER_XML = "container.xml";
 
-		// create byte buffer
-		byte[] buffer = new byte[1024];
-		/*
-		 * To create a zip file, use
-		 * 
-		 * ZipOutputStream(OutputStream out) constructor of ZipOutputStream
-		 * class.
-		 */
+    private CreateZipFileDirectoryUtils() {
+        // prevent instantiation of util class
+    }
 
-		// create object of FileOutputStream
-		FileOutputStream fout = new FileOutputStream(zipFile);
+    public static void main(final String zipFile, final String sourceDirectory) throws IOException {
 
-		// create object of ZipOutputStream from FileOutputStream
-		ZipOutputStream zout = new ZipOutputStream(fout);
+        // create byte buffer
+        byte[] buffer = new byte[1024];
+        /*
+         * To create a zip file, use
+         * 
+         * ZipOutputStream(OutputStream out) constructor of ZipOutputStream
+         * class.
+         */
 
-		// write mimetype first as part of EPUB spec
-		writeMimeType(zout);
-		writeMeta(zout);
+        // create object of FileOutputStream
+        FileOutputStream fout = new FileOutputStream(zipFile);
 
-		// create File object from directory name
-		File dir = new File(sourceDirectory);
+        // create object of ZipOutputStream from FileOutputStream
+        ZipOutputStream zout = new ZipOutputStream(fout);
 
-		// check to see if this directory exists
-		if (!dir.isDirectory()) {
-			LOGGER.debug(sourceDirectory + " is not a directory");
-		} else {
-			File[] files = dir.listFiles();
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					String folderName = StringUtils.remove(files[i].getName(), sourceDirectory);
-					addFilesToZip(buffer, zout, files[i].listFiles(), folderName);
-				} else {
-					LOGGER.debug(files[i].getName());
-					addFileToZip(buffer, zout, files[i], "");
-				}
-			}
+        // write mimetype first as part of EPUB spec
+        writeMimeType(zout);
+        writeMeta(zout);
 
-		}
+        // create File object from directory name
+        File dir = new File(sourceDirectory);
 
-		// close the ZipOutputStream
-		zout.close();
+        // check to see if this directory exists
+        if (!dir.isDirectory()) {
+            LOGGER.debug(sourceDirectory + " is not a directory");
+        } else {
+            File[] files = dir.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
+                    String folderName = StringUtils.remove(files[i].getName(), sourceDirectory);
+                    addFilesToZip(buffer, zout, files[i].listFiles(), folderName);
+                } else {
+                    LOGGER.debug(files[i].getName());
+                    addFileToZip(buffer, zout, files[i], "");
+                }
+            }
 
-		LOGGER.debug("Zip file has been created!");
+        }
 
-	}
+        // close the ZipOutputStream
+        zout.close();
 
-	private static void writeMimeType(ZipOutputStream zip) throws IOException {
-		byte[] content = EPUB_MIME_CONTENT.getBytes(UTF8_CHARSET);
-		ZipEntry entry = new ZipEntry(MIMETYPE);
-		entry.setMethod(ZipEntry.STORED);
-		entry.setSize(20);
-		entry.setCompressedSize(20);
-		entry.setCrc(0x2CAB616F); // pre-computed
-		zip.putNextEntry(entry);
-		zip.write(content);
-		zip.closeEntry();
-		LOGGER.debug("Successfully wrote mimetype");
-	}
-	
-	/**
-	 * 
-	 * @param zip
-	 * @throws UnsupportedEncodingException (subclass of IOException)
-	 * @throws IOException
-	 */
-	private static void writeMeta(ZipOutputStream zip) throws IOException {
-		ZipEntry entry = new ZipEntry(metaFolder+File.separator+"container.xml");
-		zip.putNextEntry(entry);
-	    zip.write("<?xml version=\"1.0\"?>\r\n".getBytes(UTF8_CHARSET));
-	    zip.write("<container version=\"1.0\" xmlns=\"urn:oasis:names:tc:opendocument:xmlns:container\">\r\n".getBytes(UTF8_CHARSET));
-	    zip.write("<rootfiles>\r\n".getBytes(UTF8_CHARSET));
-	    zip.write("<rootfile full-path=\"content.opf\" media-type=\"application/oebps-package+xml\"/>\r\n".getBytes(UTF8_CHARSET));
-	    zip.write("</rootfiles>\r\n".getBytes(UTF8_CHARSET));
-	    zip.write("</container>\r\n".getBytes(UTF8_CHARSET));
-	    zip.closeEntry();
-	}
+        LOGGER.debug("Zip file has been created!");
 
-	/**
-	 * 
-	 * @param buffer
-	 * @param zout
-	 * @param files
-	 * @param folderName
-	 * @throws FileNotFoundException (subclass of IOException)
-	 * @throws IOException
-	 */
-	private static void addFilesToZip(byte[] buffer, ZipOutputStream zout, File[] files, String folderName) throws IOException {
-		for (int i = 0; i < files.length; i++) {
-			addFileToZip(buffer, zout, files[i], folderName);
-		}
-	}
+    }
 
-	/**
-	 * 
-	 * @param buffer
-	 * @param zout
-	 * @param file
-	 * @param folderName
-	 * @throws FileNotFoundException (subclass of IOException)
-	 * @throws IOException
-	 */
-	private static void addFileToZip(byte[] buffer, ZipOutputStream zout, File file, String folderName) throws IOException {
-		if (StringUtils.contains(file.getName(), MIMETYPE) || StringUtils.contains(file.getName(), "container.xml")) {
-			LOGGER.debug("Skipping " + file.getName());
-			return;
-		}
-		LOGGER.debug("Adding " + file.getName());
+    private static void writeMimeType(ZipOutputStream zip) throws IOException {
+        byte[] content = EPUB_MIME_CONTENT.getBytes(UTF8_CHARSET);
+        ZipEntry entry = new ZipEntry(MIMETYPE);
+        entry.setMethod(ZipEntry.STORED);
+        entry.setSize(20);
+        entry.setCompressedSize(20);
+        entry.setCrc(0x2CAB616F); // pre-computed
+        zip.putNextEntry(entry);
+        zip.write(content);
+        zip.closeEntry();
+        LOGGER.debug("Successfully wrote mimetype");
+    }
 
-		// create object of FileInputStream for source file
-		FileInputStream fin = new FileInputStream(file);
+    /**
+     * 
+     * @param zip
+     * @throws UnsupportedEncodingException
+     *             (subclass of IOException)
+     * @throws IOException
+     */
+    private static void writeMeta(ZipOutputStream zip) throws IOException {
+        ZipEntry entry = new ZipEntry(META_FOLDER + File.separator + CONTAINER_XML);
+        zip.putNextEntry(entry);
+        zip.write("<?xml version=\"1.0\"?>\r\n".getBytes(UTF8_CHARSET));
+        zip.write("<container version=\"1.0\" xmlns=\"urn:oasis:names:tc:opendocument:xmlns:container\">\r\n".getBytes(UTF8_CHARSET));
+        zip.write("<rootfiles>\r\n".getBytes(UTF8_CHARSET));
+        zip.write("<rootfile full-path=\"content.opf\" media-type=\"application/oebps-package+xml\"/>\r\n".getBytes(UTF8_CHARSET));
+        zip.write("</rootfiles>\r\n".getBytes(UTF8_CHARSET));
+        zip.write("</container>\r\n".getBytes(UTF8_CHARSET));
+        zip.closeEntry();
+    }
 
-		/*
-		 * To begin writing ZipEntry in the zip file, use
-		 * 
-		 * void putNextEntry(ZipEntry entry) method of ZipOutputStream class.
-		 * 
-		 * This method begins writing a new Zip entry to the zip file and
-		 * positions the stream to the start of the entry data.
-		 */
+    /**
+     * 
+     * @param buffer
+     * @param zout
+     * @param files
+     * @param folderName
+     * @throws FileNotFoundException
+     *             (subclass of IOException)
+     * @throws IOException
+     */
+    private static void addFilesToZip(byte[] buffer, ZipOutputStream zout, File[] files, String folderName) throws IOException {
+        for (int i = 0; i < files.length; i++) {
+            addFileToZip(buffer, zout, files[i], folderName);
+        }
+    }
 
-		zout.putNextEntry(new ZipEntry(folderName + "/" + file.getName()));
+    /**
+     * 
+     * @param buffer
+     * @param zout
+     * @param file
+     * @param folderName
+     * @throws FileNotFoundException
+     *             (subclass of IOException)
+     * @throws IOException
+     */
+    private static void addFileToZip(byte[] buffer, ZipOutputStream zout, File file, String folderName) throws IOException {
+        if (StringUtils.contains(file.getName(), MIMETYPE) || StringUtils.contains(file.getName(), CONTAINER_XML)) {
+            LOGGER.debug("Skipping " + file.getName());
+            return;
+        }
+        LOGGER.debug("Adding " + file.getName());
 
-		/*
-		 * After creating entry in the zip file, actually write the file.
-		 */
-		int length;
+        // create object of FileInputStream for source file
+        FileInputStream fin = new FileInputStream(file);
 
-		while ((length = fin.read(buffer)) > 0) {
-			zout.write(buffer, 0, length);
-		}
+        // TODO upgrade to Java 7 and use AutoCloseable instead of try
+        try {
 
-		/*
-		 * After writing the file to ZipOutputStream, use
-		 * 
-		 * void closeEntry() method of ZipOutputStream class to close the
-		 * current entry and position the stream to write the next entry.
-		 */
+            /*
+             * To begin writing ZipEntry in the zip file, use
+             * 
+             * void putNextEntry(ZipEntry entry) method of ZipOutputStream
+             * class.
+             * 
+             * This method begins writing a new Zip entry to the zip file and
+             * positions the stream to the start of the entry data.
+             */
 
-		zout.closeEntry();
+            zout.putNextEntry(new ZipEntry(folderName + "/" + file.getName()));
 
-		// close the InputStream
-		fin.close();
-	}
+            /*
+             * After creating entry in the zip file, actually write the file.
+             */
+            int length;
+
+            while ((length = fin.read(buffer)) > 0) {
+                zout.write(buffer, 0, length);
+            }
+
+            /*
+             * After writing the file to ZipOutputStream, use
+             * 
+             * void closeEntry() method of ZipOutputStream class to close the
+             * current entry and position the stream to write the next entry.
+             */
+
+            zout.closeEntry();
+        } finally {
+            // close the InputStream
+            fin.close();
+
+        }
+    }
 }
 
 /*
