@@ -1,13 +1,13 @@
 package org.dontexist.kb.integration;
 
-import java.io.File;
-import java.io.IOException;
-
+import junitx.framework.FileAssert;
 import org.apache.commons.io.FileUtils;
 import org.dontexist.kb.SpringDriver;
 import org.dontexist.kb.service.EpubReaderServiceImpl;
-import org.springframework.batch.test.AssertFile;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.File;
+import java.io.IOException;
 
 abstract class AbstractEpubConverterIT {
 
@@ -27,7 +27,7 @@ abstract class AbstractEpubConverterIT {
         // inputfile);
         StringBuilder convertedFileAsString = epubReaderService.convertFileAsOneStringToUnicode(FileUtils.readFileToString(inputfile));
         FileUtils.writeStringToFile(actualOutputFile, convertedFileAsString.toString());
-        AssertFile.assertFileEquals(expectedOutputFile, actualOutputFile);
+        FileAssert.assertEquals(expectedOutputFile, actualOutputFile);
     }
 
 }

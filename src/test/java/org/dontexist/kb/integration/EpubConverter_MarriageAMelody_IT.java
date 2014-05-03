@@ -1,17 +1,11 @@
 package org.dontexist.kb.integration;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
-import org.dontexist.kb.SpringDriver;
-import org.dontexist.kb.service.EpubReaderServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.batch.test.AssertFile;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.File;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/app-context.xml")

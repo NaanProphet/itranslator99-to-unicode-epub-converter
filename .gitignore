@@ -2,10 +2,16 @@
 ~$conversion.xlsx
 target/
 
-.settings/org.eclipse.m2e.core.prefs
+.settings
 
 .classpath
 
 .project
 
-.settings/org.eclipse.jdt.core.prefs
+.idea
+
+*.iml
+
+dependency-reduced-pom.xml
+
+effective-pom.xml
