@@ -10,8 +10,17 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+/**
+ * Common class for converting text in various encodings into Unicode.
+ */
 public abstract class AbstractText2UnicodeService {
 
+    /**
+     * Performs the Unicode conversion.
+     *
+     * @param input the string to be converted
+     * @return Unicode converted equivalent
+     */
     public abstract String convert(final String input);
 
     protected List<Integer> findAllIndexOf(final String input, final String searchFor) {
@@ -20,15 +29,6 @@ public abstract class AbstractText2UnicodeService {
             indexes.add(index);
         }
         return indexes;
-    }
-
-    public String convertXml(final String input) {
-        // unescape XML text before converting
-        final String unescapedInput = StringEscapeUtils.unescapeXml(input);
-        String output = convert(unescapedInput);
-        // escape back before outputting
-        final String escapedOutput = StringEscapeUtils.escapeXml(output);
-        return escapedOutput;
     }
 
     @SuppressWarnings("unchecked")
@@ -48,9 +48,9 @@ public abstract class AbstractText2UnicodeService {
             int ithEndIndex = indexesOfEndTag.get(i); // >
 
             String preString = input.substring(ithBegIndex, ithEndIndex + 1); // include
-                                                                              // the
-                                                                              // >
-                                                                              // character
+            // the
+            // >
+            // character
             output.append(preString);
 
             if ((i + 1) != indexesOfBegTag.size()) {
@@ -72,6 +72,15 @@ public abstract class AbstractText2UnicodeService {
         return output.toString();
     }
 
+    /**
+     * Performs a series of string replacements. <p>Note: the order of the replacements depends on the inherent ordering
+     * of the {@link Map} used.</p>
+     *
+     * @param preConvertString the text to perform replacements on
+     * @param replacements     a {@link java.util.Map} containing searches as the keys and the replacements as the
+     *                         values
+     * @return the replaced text
+     */
     private String performSpecialReplacements(final String preConvertString, final Map<String, String> replacements) {
         String replacedString = preConvertString; // initialization
         for (Entry<String, String> entry : replacements.entrySet()) {

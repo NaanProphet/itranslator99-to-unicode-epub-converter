@@ -9,9 +9,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EpubReaderServiceImplTest {
+public class ParentEpubReaderServiceImplTest {
 
-    private EpubReaderServiceImpl epubReaderService;
+    private EpubReaderService epubReaderService;
 
     private static final String SANSKRIT_SPAN_SET_FIELD_NAME = "sanskrit99SpanClasses";
     private static final String SANSKRIT_SPAN_CSV_FIELD_NAME = "sanskrit99SpanClassCsv";
@@ -27,14 +27,15 @@ public class EpubReaderServiceImplTest {
 
     @Before
     public void setUp() {
-        epubReaderService = new EpubReaderServiceImpl();
+        // TODO create anonymous inner class instead
+        epubReaderService = new ZipEpubReaderServiceImpl();
     }
 
     @Test
     public void testAddSanskritSpanClasses_NullList() throws Exception {
         String csvString = null;
         Set<String> expected = SetUtils.emptySet();
-        epubReaderService.addSanskritSpanClasses(csvString);
+        ReflectionTestUtils.invokeMethod(epubReaderService, "addSanskritSpanClasses", csvString);
         Set actual = (Set) ReflectionTestUtils.getField(epubReaderService, SANSKRIT_SPAN_SET_FIELD_NAME);
         Assert.assertEquals(expected, actual);
     }
@@ -43,7 +44,7 @@ public class EpubReaderServiceImplTest {
     public void testAddSanskritSpanClasses_GoodListNoDuplicates() throws Exception {
         String csvString = "span1,span2,span3";
         Set<String> expected = expectedSetOfThreeSpans();
-        epubReaderService.addSanskritSpanClasses(csvString);
+        ReflectionTestUtils.invokeMethod(epubReaderService, "addSanskritSpanClasses", csvString);
         Set actual = (Set) ReflectionTestUtils.getField(epubReaderService, SANSKRIT_SPAN_SET_FIELD_NAME);
         Assert.assertEquals(expected, actual);
     }
@@ -52,7 +53,7 @@ public class EpubReaderServiceImplTest {
     public void testAddSanskritSpanClasses_GoodListWithDuplicates() throws Exception {
         String csvString = "span1,span2,span1,span3";
         Set<String> expected = expectedSetOfThreeSpans();
-        epubReaderService.addSanskritSpanClasses(csvString);
+        ReflectionTestUtils.invokeMethod(epubReaderService, "addSanskritSpanClasses", csvString);
         Set actual = (Set) ReflectionTestUtils.getField(epubReaderService, SANSKRIT_SPAN_SET_FIELD_NAME);
         Assert.assertEquals(expected, actual);
     }

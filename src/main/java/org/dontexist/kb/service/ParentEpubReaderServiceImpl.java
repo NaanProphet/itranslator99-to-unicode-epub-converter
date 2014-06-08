@@ -1,35 +1,27 @@
 package org.dontexist.kb.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dontexist.kb.service.converter.PalladioIT2UnicodeConverterServiceImpl;
 import org.dontexist.kb.service.converter.Sanskrit99ToUnicodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
-@Service
-public class EpubReaderServiceImpl implements InitializingBean {
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+public abstract class ParentEpubReaderServiceImpl implements EpubReaderService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParentEpubReaderServiceImpl.class);
 
     private static final String SPAN_END_TAG = "</span>";
 
     private static final String SPAN_START_TAG = "<span";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EpubReaderServiceImpl.class);
 
     @Autowired
     private Sanskrit99ToUnicodeService san99Converter;
@@ -42,52 +34,15 @@ public class EpubReaderServiceImpl implements InitializingBean {
 
     private Set<String> sanskrit99SpanClasses = new HashSet<String>();
 
-    public Collection<File> drillDownFolderForExtension(File folder, String... extensions) {
-        boolean recursive = true;
+    @Override
+    public Collection<File> drillDownFolderForExtension(final File folder, final boolean isRecursive, final String... extensions) {
         @SuppressWarnings("unchecked")
-        Collection<File> filesToConvert = FileUtils.listFiles(folder, extensions, recursive);
+        Collection<File> filesToConvert = FileUtils.listFiles(folder, extensions, isRecursive);
         LOGGER.debug("Found in folder [{}] files [{}]", folder, filesToConvert);
         return filesToConvert;
     }
 
-    public Map<File, String> unzipEpubFindingTextHtmlFiles(final File ithEpub, final String unzipPath) throws IOException, ZipException {
-        // epubs are actually zips with special metadata
-        unzipFile(ithEpub, unzipPath);
-
-        final File textFolder = new File(unzipPath + "/text/");
-        if (!textFolder.exists()) {
-            // TODO what if epubs are saved differently?
-            throw new IllegalStateException(String.format("Unexpected epub format! Cannot find folder [%s]", textFolder));
-        }
-        Collection<File> filesToConvert = drillDownFolderForExtension(textFolder, "html");
-
-        Map<File, String> filesAsStringToConvert = new HashMap<File, String>();
-
-        // --------- READ FILE, PARSING AND REPLACING CONTENT INSIDE <SPAN>
-        // TAGS
-        // ----------
-
-        for (File ithFile : filesToConvert) {
-            String ithFileAsOneString = FileUtils.readFileToString(ithFile);
-            filesAsStringToConvert.put(ithFile, ithFileAsOneString);
-
-        }
-        return filesAsStringToConvert;
-    }
-
-    private File unzipFile(final File file, final String unzipFolderDestination) throws IOException, ZipException {
-        File unzipDestinationFolder = new File(unzipFolderDestination);
-        if (unzipDestinationFolder.exists()) {
-            // deletes even if not empty
-            FileUtils.deleteDirectory(unzipDestinationFolder);
-        }
-
-        ZipFile zipFile = new ZipFile(file);
-        // creates destination automatically
-        zipFile.extractAll(unzipFolderDestination);
-        return unzipDestinationFolder;
-    }
-
+    @Override
     public StringBuilder convertFileAsOneStringToUnicode(final String entireFileAsOneString) throws IOException {
         // do not escape html characters yet, because we need to split
         // based on tags
@@ -145,11 +100,12 @@ public class EpubReaderServiceImpl implements InitializingBean {
         return convertedSpanString;
     }
 
+    @Override
     public void afterPropertiesSet() {
         addSanskritSpanClasses(sanskrit99SpanClassCsv);
     }
 
-    public void addSanskritSpanClasses(final String csvString) {
+    void addSanskritSpanClasses(final String csvString) {
         String[] spanClasses = StringUtils.split(csvString, ",");
         if (spanClasses == null) {
             return;
@@ -158,5 +114,4 @@ public class EpubReaderServiceImpl implements InitializingBean {
             sanskrit99SpanClasses.add(ithSpanClass);
         }
     }
-
 }

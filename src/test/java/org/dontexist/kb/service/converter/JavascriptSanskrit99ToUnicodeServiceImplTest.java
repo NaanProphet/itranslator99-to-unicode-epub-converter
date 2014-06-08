@@ -108,6 +108,15 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
     // ----------- CHARACTER CONVERSION TESTS -------------
 
 
+    /**
+     * <table>
+     * <tr><td>itrans</td>
+     * <td>unicode dec</td>
+     * <td>unicode devanagari</td>
+     * </tr>
+     * <tr><td>hra</td><td>255</td><td>"ह्र"</td></tr>
+     * </table>
+     */
     @Test
     public void testConvert_255() {
         verify((char) 255, "ह्र"); // hra

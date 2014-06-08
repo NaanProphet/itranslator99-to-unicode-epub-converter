@@ -40,7 +40,7 @@ function convert_to_unicode(input_text) {
 	
 	// // matching special additions pair BEGIN
 	
-	"ह्ण", 
+	"ह्ण",
 
 	"ॐ", "म्न", "श्ल", "क्ल", "श्व", "द्र्य", "ग्न", "श्च", "घ्न", "ज्ज", "त्न", "द्ब", "न्त्र",
 
