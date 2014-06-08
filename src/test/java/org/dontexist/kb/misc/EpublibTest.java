@@ -5,7 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -13,6 +16,7 @@ import junit.framework.Assert;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.MediaType;
 import nl.siegmann.epublib.domain.Resource;
+import nl.siegmann.epublib.domain.Resources;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.epub.EpubWriter;
 
@@ -53,10 +57,13 @@ public class EpublibTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void testReadAndWriteWithModification() throws Exception {
         EpubReader epubReader = new EpubReader();
         Book bookIn = epubReader.readEpub(new FileInputStream(FILENAME_IN));
         List<Resource> x = bookIn.getContents();
+        Resource css = bookIn.getResources().getById("css");
+        String cssFileText = IOUtils.toString(css.getInputStream());
+        Resource pageCss = bookIn.getResources().getById("page_css");
         for (Resource ithX : x) {
             String qualifiedFilename = ithX.getHref();
             MediaType mediaType = ithX.getMediaType();

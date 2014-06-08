@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface EpubReaderService extends InitializingBean {
 
-    Map<File, String> openEpubFindingTextHtmlFiles(File ithEpub, String unzipPath) throws IOException, ZipException;
+//    Map<File, String> openEpubFindingTextHtmlFiles(File ithEpub, String unzipPath) throws IOException, ZipException;
 
     Collection<File> drillDownFolderForExtension(File folder, boolean isRecursive, String... extensions);
 

@@ -22,7 +22,6 @@ public class ZipEpubReaderServiceImpl extends ParentEpubReaderServiceImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ZipEpubReaderServiceImpl.class);
 
-    @Override
     public Map<File, String> openEpubFindingTextHtmlFiles(final File ithEpub, final String unzipPath) throws IOException, ZipException {
         // epubs are actually zips with special metadata
         unzipFile(ithEpub, unzipPath);
