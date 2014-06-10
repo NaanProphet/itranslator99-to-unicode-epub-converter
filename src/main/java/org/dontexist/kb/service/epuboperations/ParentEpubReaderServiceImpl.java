@@ -1,4 +1,4 @@
-package org.dontexist.kb.service;
+package org.dontexist.kb.service.epuboperations;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -6,8 +6,10 @@ import org.dontexist.kb.service.converter.PalladioIT2UnicodeConverterServiceImpl
 import org.dontexist.kb.service.converter.Sanskrit99ToUnicodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +17,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class ParentEpubReaderServiceImpl implements EpubReaderService {
+@Service
+public class ParentEpubReaderServiceImpl implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParentEpubReaderServiceImpl.class);
 
@@ -34,15 +37,8 @@ public abstract class ParentEpubReaderServiceImpl implements EpubReaderService {
 
     private Set<String> sanskrit99SpanClasses = new HashSet<String>();
 
-    @Override
-    public Collection<File> drillDownFolderForExtension(final File folder, final boolean isRecursive, final String... extensions) {
-        @SuppressWarnings("unchecked")
-        Collection<File> filesToConvert = FileUtils.listFiles(folder, extensions, isRecursive);
-        LOGGER.debug("Found in folder [{}] files [{}]", folder, filesToConvert);
-        return filesToConvert;
-    }
 
-    @Override
+
     public StringBuilder convertFileAsOneStringToUnicode(final String entireFileAsOneString) throws IOException {
         // do not escape html characters yet, because we need to split
         // based on tags

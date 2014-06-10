@@ -1,6 +1,9 @@
 package org.dontexist.kb.service;
 
 import org.apache.commons.collections4.SetUtils;
+import org.dontexist.kb.service.epuboperations.EpubReaderService;
+import org.dontexist.kb.service.epuboperations.ParentEpubReaderServiceImpl;
+import org.dontexist.kb.service.epuboperations.ZipEpubReaderServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +14,8 @@ import java.util.Set;
 
 public class ParentEpubReaderServiceImplTest {
 
-    private EpubReaderService epubReaderService;
+    // TODO rename
+    private ParentEpubReaderServiceImpl epubReaderService;
 
     private static final String SANSKRIT_SPAN_SET_FIELD_NAME = "sanskrit99SpanClasses";
     private static final String SANSKRIT_SPAN_CSV_FIELD_NAME = "sanskrit99SpanClassCsv";
@@ -27,8 +31,7 @@ public class ParentEpubReaderServiceImplTest {
 
     @Before
     public void setUp() {
-        // TODO create anonymous inner class instead
-        epubReaderService = new ZipEpubReaderServiceImpl();
+        epubReaderService = new ParentEpubReaderServiceImpl();
     }
 
     @Test

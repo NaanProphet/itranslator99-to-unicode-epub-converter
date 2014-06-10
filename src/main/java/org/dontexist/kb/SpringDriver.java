@@ -3,9 +3,9 @@ package org.dontexist.kb;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.dontexist.kb.service.EpublibEpubReaderServiceImpl;
-import org.dontexist.kb.service.ZipEpubReaderServiceImpl;
-import org.dontexist.kb.util.CreateZipFileDirectoryUtils;
+import org.dontexist.kb.service.epuboperations.EpubReaderService;
+import org.dontexist.kb.service.epuboperations.EpubReaderServiceFactory;
+import org.dontexist.kb.service.epuboperations.ParentEpubReaderServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 
 public class SpringDriver implements ActionListener {
@@ -28,9 +27,11 @@ public class SpringDriver implements ActionListener {
     private final CountDownLatch userSelectionLatch = new CountDownLatch(1);
     @Value("${delete.temp.extracted.folder}")
     private boolean isDeleteTempFiles;
-    @Autowired
-    private EpublibEpubReaderServiceImpl epubReaderService;
     private EpubSelectGui.PromptOptions optionSelected;
+    @Autowired
+    private EpubReaderServiceFactory epubReaderServiceFactory;
+
+    private ParentEpubReaderServiceImpl tempService = new ParentEpubReaderServiceImpl();
 
     public void main() throws ZipException, IOException {
         LOGGER.debug("Reached SpringDriver!");
@@ -39,13 +40,21 @@ public class SpringDriver implements ActionListener {
         convertEpub(epubsToConvert);
     }
 
+    // TODO duplicated method, should be in util
+    private Collection<File> drillDownFolderForExtension(final File folder, final boolean isRecursive, final String... extensions) {
+        @SuppressWarnings("unchecked")
+        Collection<File> filesToConvert = FileUtils.listFiles(folder, extensions, isRecursive);
+        LOGGER.debug("Found in folder [{}] files [{}]", folder, filesToConvert);
+        return filesToConvert;
+    }
+
     private Collection<File> fetchEpubsToConvert(final EpubSelectGui.PromptOptions optionSelected) {
         if (optionSelected == EpubSelectGui.PromptOptions.ALL_FILES_IN_FOLDER_RECURSIVELY) {
             File folder = askUserToSelectInputFolder();
-            return epubReaderService.drillDownFolderForExtension(folder, true, "epub");
+            return drillDownFolderForExtension(folder, true, "epub");
         } else if (optionSelected == EpubSelectGui.PromptOptions.ALL_FILES_IN_A_SINGLE_FOLDER) {
             File folder = askUserToSelectInputFolder();
-            return epubReaderService.drillDownFolderForExtension(folder, false, "epub");
+            return drillDownFolderForExtension(folder, false, "epub");
         } else if (optionSelected == EpubSelectGui.PromptOptions.SINGLE_FILE) {
             File file = askUserToSelectInputFile();
             Collection<File> returnMe = new ArrayList<File>();
@@ -58,40 +67,19 @@ public class SpringDriver implements ActionListener {
 
     private void convertEpub(final Collection<File> epubsToConvert) throws ZipException, IOException {
         for (File ithEpub : epubsToConvert) {
+            // prototype service, based on file
+            final EpubReaderService epubReaderService = epubReaderServiceFactory.createEpubReaderService(ithEpub);
+            final Map<String, String> filesAsStringToConvert = epubReaderService.openEpubFindingTextHtmlFiles();
 
-//            final Map<File, String> filesAsStringToConvert = epubReaderService.openEpubFindingTextHtmlFiles(ithEpub,
-//                    unzippedEpubFolderPath(ithEpub));
-            final Map<String, String> filesAsStringToConvert = epubReaderService.openEpubFindingTextHtmlFiles(ithEpub);
-
-//            for (Entry<File, String> entry : filesAsStringToConvert.entrySet()) {
-            for (Entry<String, String> entry : filesAsStringToConvert.entrySet()) {
-//                final File ithFile = entry.getKey();
+            for (Map.Entry<String, String> entry : filesAsStringToConvert.entrySet()) {
                 final String ithHref = entry.getKey();
                 final String ithFileAsOneString = entry.getValue();
-                final StringBuilder convertedFileAsString = epubReaderService.convertFileAsOneStringToUnicode(ithFileAsOneString);
+                final StringBuilder convertedFileAsString = tempService.convertFileAsOneStringToUnicode(ithFileAsOneString);
 
-                // overwrite file, since we created a new folder
-//                FileUtils.writeStringToFile(ithFile, convertedFileAsString.toString(), "UTF8");
-                epubReaderService.writeEpubPage(convertedFileAsString.toString(), ithHref, ithEpub);
-
+                epubReaderService.writeEpubPage(convertedFileAsString.toString(), ithHref);
             }
-
-            File outputFile = new File(unzippedEpubFolderPath(ithEpub) + ".epub");
-            epubReaderService.flushEpub(outputFile);
-
-            // ---------- ZIP UP NEW EPUB ----------
-//            CreateZipFileDirectoryUtils.main(unzippedEpubFolderPath(ithEpub) + ".epub", unzippedEpubFolderPath(ithEpub));
-
-            // ---------- CLEANUP TEMP FOLDER ------------
-//            if (isDeleteTempFiles) {
-//                FileUtils.deleteDirectory(new File(unzippedEpubFolderPath(ithEpub)));
-//            }
+            epubReaderService.flushEpub(ithEpub);
         }
-    }
-
-    private String unzippedEpubFolderPath(File ithEpub) {
-        final String unzipFolderDestination = FilenameUtils.removeExtension(ithEpub.getAbsolutePath()) + "-unicode";
-        return unzipFolderDestination;
     }
 
     private File askUserToSelectInputFolder() {

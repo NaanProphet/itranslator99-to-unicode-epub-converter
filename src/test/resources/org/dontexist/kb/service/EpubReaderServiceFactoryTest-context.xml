@@ -7,9 +7,7 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-    <context:component-scan base-package="org.dontexist.kb.service"/>
-
-    <bean id="springDriver" class="org.dontexist.kb.SpringDriver"/>
+    <context:component-scan base-package="org.dontexist.kb.service.epuboperations"/>
 
     <bean
             class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -21,10 +19,5 @@
     <bean id="epubReaderServiceImplBeanName" class="java.lang.String">
         <constructor-arg value="${epubReaderType:epublib}EpubReaderServiceImpl" />
     </bean>
-
-    <util:map id="palladioPostReplacementCorrections" map-class="java.util.LinkedHashMap" key-type="java.lang.String"
-              value-type="java.lang.String">
-        <entry key="fiancī" value="fiancé"/>
-    </util:map>
 
 </beans>

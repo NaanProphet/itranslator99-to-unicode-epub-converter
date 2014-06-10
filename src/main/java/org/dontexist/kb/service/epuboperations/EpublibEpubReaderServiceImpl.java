@@ -1,12 +1,13 @@
-package org.dontexist.kb.service;
+package org.dontexist.kb.service.epuboperations;
 
-import net.lingala.zip4j.exception.ZipException;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.MediaType;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.epub.EpubWriter;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -15,17 +16,23 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class EpublibEpubReaderServiceImpl extends ParentEpubReaderServiceImpl {
+@Scope("prototype")
+public class EpublibEpubReaderServiceImpl implements EpubReaderService, InitializingBean {
 
     private static final String EPUB_TEXT_FOLDER = "text";
     private static final String EPUB_FILE_ENCODING = "UTF-8";
 
-    // FIXME bad state
+    private final EpubReader epubReader = new EpubReader();
+    private final File epubFile;
     private Book bookIn;
 
-    public Map<String, String> openEpubFindingTextHtmlFiles(final File epubFile) throws IOException {
+    public EpublibEpubReaderServiceImpl(final File epubFile) throws IOException {
+        this.epubFile = epubFile;
+    }
+
+    @Override
+    public Map<String, String> openEpubFindingTextHtmlFiles() throws IOException {
         Map<String, String> epubPagesMap = new HashMap<String, String>();
-        bookIn = new EpubReader().readEpub(new FileInputStream(epubFile));
         List<Resource> contents = bookIn.getContents();
         for (Resource page : contents) {
             String qualifiedFilename = page.getHref();
@@ -41,16 +48,23 @@ public class EpublibEpubReaderServiceImpl extends ParentEpubReaderServiceImpl {
         return epubPagesMap;
     }
 
-    public void writeEpubPage(final String fileAsString, final String hrefLocation, final File epubFile) throws IOException {
+    @Override
+    public void writeEpubPage(final String fileAsString, final String hrefLocation) throws IOException {
         // FIXME assumes file is the same as state!
         Resource pageToUpdate = bookIn.getResources().getByHref(hrefLocation);
         pageToUpdate.setData(fileAsString.getBytes());
     }
 
-    public void flushEpub(File outputFile) throws IOException {
+    @Override
+    public void flushEpub(final File outputFile) throws IOException {
         // FIXME assumes file is same as state!
         EpubWriter epubWriter = new EpubWriter();
         FileOutputStream out = new FileOutputStream(outputFile);
         epubWriter.write(bookIn, out);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        bookIn = epubReader.readEpub(new FileInputStream(epubFile));
     }
 }
