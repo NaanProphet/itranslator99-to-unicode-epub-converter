@@ -7,6 +7,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.dontexist.kb.util.CreateZipFileDirectoryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
+@Scope("prototype")
 public class ZipEpubReaderServiceImpl implements EpubReaderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ZipEpubReaderServiceImpl.class);
@@ -83,7 +87,7 @@ public class ZipEpubReaderServiceImpl implements EpubReaderService {
     }
 
     @Override
-    public void flushEpub(File outputFile) throws IOException {
+    public void flushEpub(String outputFilePath) throws IOException {
         // ---------- ZIP UP NEW EPUB ----------
         CreateZipFileDirectoryUtils.main(unzippedEpubFolderPath(epubFile) + ".epub", unzippedEpubFolderPath(epubFile));
         // ---------- CLEANUP TEMP FOLDER ------------

@@ -6,9 +6,12 @@ import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.epub.EpubWriter;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.io.*;
 import java.util.HashMap;
@@ -18,6 +21,8 @@ import java.util.Map;
 @Service
 @Scope("prototype")
 public class EpublibEpubReaderServiceImpl implements EpubReaderService, InitializingBean {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EpublibEpubReaderServiceImpl.class);
 
     private static final String EPUB_TEXT_FOLDER = "text";
     private static final String EPUB_FILE_ENCODING = "UTF-8";
@@ -50,17 +55,18 @@ public class EpublibEpubReaderServiceImpl implements EpubReaderService, Initiali
 
     @Override
     public void writeEpubPage(final String fileAsString, final String hrefLocation) throws IOException {
-        // FIXME assumes file is the same as state!
         Resource pageToUpdate = bookIn.getResources().getByHref(hrefLocation);
         pageToUpdate.setData(fileAsString.getBytes());
     }
 
     @Override
-    public void flushEpub(final File outputFile) throws IOException {
-        // FIXME assumes file is same as state!
+    public void flushEpub(final String outputFilePath) throws IOException {
+        LOGGER.info("Attempting to write converted ePUB to disk ... [{}]", outputFilePath);
         EpubWriter epubWriter = new EpubWriter();
-        FileOutputStream out = new FileOutputStream(outputFile);
+        boolean append = false;
+        FileOutputStream out = new FileOutputStream(outputFilePath, append);
         epubWriter.write(bookIn, out);
+        LOGGER.info("Successfully wrote converted ePUB [{}]", outputFilePath);
     }
 
     @Override

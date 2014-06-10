@@ -1,5 +1,6 @@
-package org.dontexist.kb.service;
+package org.dontexist.kb.service.epuboperations;
 
+import junit.framework.Assert;
 import org.dontexist.kb.service.epuboperations.EpubReaderService;
 import org.dontexist.kb.service.epuboperations.EpubReaderServiceFactory;
 import org.junit.Test;
@@ -12,9 +13,11 @@ import java.io.File;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-public class EpubReaderServiceFactoryTest {
+public abstract class EpubReaderServiceFactoryTest {
 
     public static final String EPUB_FILE_FOR_READING = "src/test/resources/org/dontexist/kb/test.epub";
+
+    abstract Class getExpectedServiceClass();
 
     @Autowired
     private EpubReaderServiceFactory epubReaderServiceFactory;
@@ -23,7 +26,9 @@ public class EpubReaderServiceFactoryTest {
     public void createEpubReaderServiceTest() throws Exception {
         File epubFile = new File(EPUB_FILE_FOR_READING);
         EpubReaderService service = epubReaderServiceFactory.createEpubReaderService(epubFile);
-        System.out.println(service.getClass());
+        Class actual = service.getClass();
+        Class expected = getExpectedServiceClass();
+        Assert.assertEquals(expected, actual);
     }
 
 }

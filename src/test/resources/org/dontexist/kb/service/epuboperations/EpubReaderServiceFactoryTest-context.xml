@@ -17,7 +17,7 @@
     </bean>
 
     <bean id="epubReaderServiceImplBeanName" class="java.lang.String">
-        <constructor-arg value="${epubReaderType:epublib}EpubReaderServiceImpl" />
+        <constructor-arg value="${epubReaderType}EpubReaderServiceImpl" />
     </bean>
 
 </beans>

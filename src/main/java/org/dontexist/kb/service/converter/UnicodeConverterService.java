@@ -1,9 +1,6 @@
-package org.dontexist.kb.service.epuboperations;
+package org.dontexist.kb.service.converter;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.dontexist.kb.service.converter.PalladioIT2UnicodeConverterServiceImpl;
-import org.dontexist.kb.service.converter.Sanskrit99ToUnicodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -11,16 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class ParentEpubReaderServiceImpl implements InitializingBean {
+public class UnicodeConverterService implements InitializingBean {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParentEpubReaderServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnicodeConverterService.class);
 
     private static final String SPAN_END_TAG = "</span>";
 

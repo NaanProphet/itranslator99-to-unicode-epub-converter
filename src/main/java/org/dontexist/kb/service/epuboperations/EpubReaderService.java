@@ -27,10 +27,10 @@ public interface EpubReaderService {
 
     /**
      * Commits the epubFile to disk
-     * @param outputFile destination, will be created
+     * @param outputFilePath destination, will be created
      * @throws IOException
      */
-    void flushEpub(File outputFile) throws IOException;
+    void flushEpub(String outputFilePath) throws IOException;
 
 //    Map<File, String> openEpubFindingTextHtmlFiles(File ithEpub, String unzipPath) throws IOException, ZipException;
 

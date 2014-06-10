@@ -5,7 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.dontexist.kb.service.epuboperations.EpubReaderService;
 import org.dontexist.kb.service.epuboperations.EpubReaderServiceFactory;
-import org.dontexist.kb.service.epuboperations.ParentEpubReaderServiceImpl;
+import org.dontexist.kb.service.converter.UnicodeConverterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,8 @@ public class SpringDriver implements ActionListener {
     @Autowired
     private EpubReaderServiceFactory epubReaderServiceFactory;
 
-    private ParentEpubReaderServiceImpl tempService = new ParentEpubReaderServiceImpl();
+    @Autowired
+    private UnicodeConverterService tempService;
 
     public void main() throws ZipException, IOException {
         LOGGER.debug("Reached SpringDriver!");
@@ -78,7 +79,8 @@ public class SpringDriver implements ActionListener {
 
                 epubReaderService.writeEpubPage(convertedFileAsString.toString(), ithHref);
             }
-            epubReaderService.flushEpub(ithEpub);
+            final String outputFilePath = ithEpub.getParent() + "/" + FilenameUtils.getBaseName(ithEpub.getAbsolutePath()) + "-unicode.epub";
+            epubReaderService.flushEpub(outputFilePath);
         }
     }
 

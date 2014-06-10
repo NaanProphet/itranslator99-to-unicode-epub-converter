@@ -3,8 +3,7 @@ package org.dontexist.kb.integration;
 import junitx.framework.FileAssert;
 import org.apache.commons.io.FileUtils;
 import org.dontexist.kb.SpringDriver;
-import org.dontexist.kb.service.epuboperations.ParentEpubReaderServiceImpl;
-import org.dontexist.kb.service.epuboperations.ZipEpubReaderServiceImpl;
+import org.dontexist.kb.service.converter.UnicodeConverterService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
@@ -15,8 +14,8 @@ abstract class AbstractEpubConverterIT {
     @Autowired
     protected SpringDriver springDriver;
 
-    // TODO autowire instead
-    protected ParentEpubReaderServiceImpl epubReaderService = new ParentEpubReaderServiceImpl();
+    @Autowired
+    protected UnicodeConverterService epubReaderService;
 
     // --------------- HELPER METHODS -----------------
 
