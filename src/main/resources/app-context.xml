@@ -19,7 +19,7 @@
     </bean>
 
     <bean id="epubReaderServiceImplBeanName" class="java.lang.String">
-        <constructor-arg value="${epubReaderType:epublib}EpubReaderServiceImpl" />
+        <constructor-arg value="${epubReaderType}EpubReaderServiceImpl" />
     </bean>
 
     <util:map id="palladioPostReplacementCorrections" map-class="java.util.LinkedHashMap" key-type="java.lang.String"
