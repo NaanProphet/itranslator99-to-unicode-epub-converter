@@ -13,9 +13,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class UnicodeConverterService implements InitializingBean {
+public class UnicodeConverterHelper implements InitializingBean {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnicodeConverterService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnicodeConverterHelper.class);
 
     private static final String SPAN_END_TAG = "</span>";
 

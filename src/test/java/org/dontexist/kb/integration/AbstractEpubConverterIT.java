@@ -3,7 +3,7 @@ package org.dontexist.kb.integration;
 import junitx.framework.FileAssert;
 import org.apache.commons.io.FileUtils;
 import org.dontexist.kb.SpringDriver;
-import org.dontexist.kb.service.converter.UnicodeConverterService;
+import org.dontexist.kb.service.converter.UnicodeConverterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
@@ -15,7 +15,7 @@ abstract class AbstractEpubConverterIT {
     protected SpringDriver springDriver;
 
     @Autowired
-    protected UnicodeConverterService epubReaderService;
+    protected UnicodeConverterHelper unicodeConverterHelper;
 
     // --------------- HELPER METHODS -----------------
 
@@ -25,7 +25,7 @@ abstract class AbstractEpubConverterIT {
         // ReflectionTestUtils.invokeMethod(springDriver,
         // "convertFileToUnicode",
         // inputfile);
-        StringBuilder convertedFileAsString = epubReaderService.convertFileAsOneStringToUnicode(FileUtils.readFileToString(inputfile));
+        StringBuilder convertedFileAsString = unicodeConverterHelper.convertFileAsOneStringToUnicode(FileUtils.readFileToString(inputfile));
         FileUtils.writeStringToFile(actualOutputFile, convertedFileAsString.toString());
         FileAssert.assertEquals(expectedOutputFile, actualOutputFile);
     }

@@ -1,7 +1,6 @@
 package org.dontexist.kb.service.converter;
 
 import org.apache.commons.collections4.SetUtils;
-import org.dontexist.kb.service.converter.UnicodeConverterService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,10 +9,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.HashSet;
 import java.util.Set;
 
-public class UnicodeConverterServiceTest {
+public class UnicodeConverterHelperTest {
 
-    // TODO rename
-    private UnicodeConverterService epubReaderService;
+    private UnicodeConverterHelper unicodeConverterHelper;
 
     private static final String SANSKRIT_SPAN_SET_FIELD_NAME = "sanskrit99SpanClasses";
     private static final String SANSKRIT_SPAN_CSV_FIELD_NAME = "sanskrit99SpanClassCsv";
@@ -29,15 +27,15 @@ public class UnicodeConverterServiceTest {
 
     @Before
     public void setUp() {
-        epubReaderService = new UnicodeConverterService();
+        unicodeConverterHelper = new UnicodeConverterHelper();
     }
 
     @Test
     public void testAddSanskritSpanClasses_NullList() throws Exception {
         String csvString = null;
         Set<String> expected = SetUtils.emptySet();
-        ReflectionTestUtils.invokeMethod(epubReaderService, "addSanskritSpanClasses", csvString);
-        Set actual = (Set) ReflectionTestUtils.getField(epubReaderService, SANSKRIT_SPAN_SET_FIELD_NAME);
+        ReflectionTestUtils.invokeMethod(unicodeConverterHelper, "addSanskritSpanClasses", csvString);
+        Set actual = (Set) ReflectionTestUtils.getField(unicodeConverterHelper, SANSKRIT_SPAN_SET_FIELD_NAME);
         Assert.assertEquals(expected, actual);
     }
 
@@ -45,8 +43,8 @@ public class UnicodeConverterServiceTest {
     public void testAddSanskritSpanClasses_GoodListNoDuplicates() throws Exception {
         String csvString = "span1,span2,span3";
         Set<String> expected = expectedSetOfThreeSpans();
-        ReflectionTestUtils.invokeMethod(epubReaderService, "addSanskritSpanClasses", csvString);
-        Set actual = (Set) ReflectionTestUtils.getField(epubReaderService, SANSKRIT_SPAN_SET_FIELD_NAME);
+        ReflectionTestUtils.invokeMethod(unicodeConverterHelper, "addSanskritSpanClasses", csvString);
+        Set actual = (Set) ReflectionTestUtils.getField(unicodeConverterHelper, SANSKRIT_SPAN_SET_FIELD_NAME);
         Assert.assertEquals(expected, actual);
     }
 
@@ -54,17 +52,17 @@ public class UnicodeConverterServiceTest {
     public void testAddSanskritSpanClasses_GoodListWithDuplicates() throws Exception {
         String csvString = "span1,span2,span1,span3";
         Set<String> expected = expectedSetOfThreeSpans();
-        ReflectionTestUtils.invokeMethod(epubReaderService, "addSanskritSpanClasses", csvString);
-        Set actual = (Set) ReflectionTestUtils.getField(epubReaderService, SANSKRIT_SPAN_SET_FIELD_NAME);
+        ReflectionTestUtils.invokeMethod(unicodeConverterHelper, "addSanskritSpanClasses", csvString);
+        Set actual = (Set) ReflectionTestUtils.getField(unicodeConverterHelper, SANSKRIT_SPAN_SET_FIELD_NAME);
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void testAfterPropertiesSet() throws Exception {
-        ReflectionTestUtils.setField(epubReaderService, SANSKRIT_SPAN_CSV_FIELD_NAME, "span1,span2,span3");
+        ReflectionTestUtils.setField(unicodeConverterHelper, SANSKRIT_SPAN_CSV_FIELD_NAME, "span1,span2,span3");
         Set<String> expected = expectedSetOfThreeSpans();
-        epubReaderService.afterPropertiesSet();
-        Set actual = (Set) ReflectionTestUtils.getField(epubReaderService, SANSKRIT_SPAN_SET_FIELD_NAME);
+        unicodeConverterHelper.afterPropertiesSet();
+        Set actual = (Set) ReflectionTestUtils.getField(unicodeConverterHelper, SANSKRIT_SPAN_SET_FIELD_NAME);
         Assert.assertEquals(expected, actual);
     }
 

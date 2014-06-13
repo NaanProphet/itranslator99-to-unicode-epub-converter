@@ -686,6 +686,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         // Windows-1252 equiv is also 157
     }
 
+    @Ignore
     @Test
     public void testConvert_156() {
         // HALF-GLYPH
@@ -704,6 +705,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 155, ""); // TODO not sure how to create word
     }
 
+    @Ignore
     @Test
     public void testConvert_154() {
         verify((char) 154, "᳚"); // vedik double svarita \'' (not \")
@@ -712,8 +714,10 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
     @Test
     public void testConvert_154_Win_353() {
         verify((char) 353, "᳚"); // Windows-1252 equiv is š
+        verify("yš", "य᳚");
     }
 
+    @Ignore
     @Test
     public void testConvert_153() {
         verify((char) 153, "द्व्य"); // dvya
@@ -724,16 +728,18 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 8482, "द्व्य"); // Windows-1252 equiv is ™
     }
 
+    @Ignore
     @Test
     public void testConvert_152() {
         verify((char) 152, "द्घ"); // dgha
     }
 
     @Test
-    public void testConvert_152_Win_8482() {
-        verify((char) 8482, "द्घ"); // dgha
+    public void testConvert_152_Win_732() {
+        verify((char) 732, "द्घ"); // Windows-1252 equiv is ˜
     }
 
+    @Ignore
     @Test
     public void testConvert_151() {
         verify((char) 151, "ं"); // anusvara in upper right, e.g. in kIM
@@ -742,18 +748,23 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
 
     @Test
     public void testConvert_151_Win_8212() {
-        verify((char) 151, "ं"); // Windows-1252 equiv is em dash —
+        verify((char) 8212, "ं"); // Windows-1252 equiv is em dash —
     }
 
+    @Ignore
     @Test
     public void testConvert_150() {
         verify((char) 150, "़"); // "nukta" dot for the hindi "rDa character" .Da
-        // TODO test word .Da too
     }
 
     @Test
     public void testConvert_150_Win_8211() {
-        verify((char) 8211, "़"); // Windows-1252 equiv is en dash –
+        // uses nukta in Unicode 2364 (center under)
+        // this will only appear with with another letter, never by itself
+        // verify pass thru
+        verify((char) 8211, "–"); // Windows-1252 equiv is en dash –
+        verify("–f", "ड़"); // .Da letter
+        verify("–F", "ढ़"); // .Dha letter
     }
 
     @Test
@@ -763,6 +774,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         // Windows-1252 equiv is bullet 8226 •
     }
 
+    @Ignore
     @Test
     public void testConvert_148() {
         verify((char) 148, "ट्ट"); // TTa
@@ -773,6 +785,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 8221, "ट्ट"); // Windows-1252 equiv is ”
     }
 
+    @Ignore
     @Test
     public void testConvert_147() {
         verify((char) 147, "ङ्क्त"); // ~Nkta
@@ -783,6 +796,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 8220, "ङ्क्त"); // Windows-1252 equiv is “
     }
 
+    @Ignore
     @Test
     public void testConvert_146() {
         verify((char) 146, "ह्ल"); // hla
@@ -793,6 +807,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 8217, "ह्ल"); // Windows-1252 equiv is ’
     }
 
+    @Ignore
     @Test
     public void testConvert_145() {
         verify((char) 145, "ल्ल"); // lla
@@ -807,6 +822,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
     public void testConvert_144() {
         verifyUnused(144);
     }
+
 
     @Test
     public void testConvert_143() {
@@ -823,6 +839,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verifyUnused(141);
     }
 
+    @Ignore
     @Test
     public void testConvert_140() {
         verify((char) 140, "ङ्ख"); // ~Nkha
@@ -833,6 +850,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 338, "ङ्ख"); // Windows-1252 equiv is Œ
     }
 
+    @Ignore
     @Test
     public void testConvert_139() {
         verify((char) 139, "क्च"); // kcha or kca
@@ -843,6 +861,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 8249, "क्च"); // Windows-1252 equiv is ‹
     }
 
+    @Ignore
     @Test
     public void testConvert_138() {
         verify((char) 138, "क्क"); // kka
@@ -853,6 +872,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 352, "क्क"); // Windows-1252 equiv is Š
     }
 
+    @Ignore
     @Test
     public void testConvert_137() {
         verify((char) 137, "्"); // lowered virama, e.g. in dn
@@ -861,9 +881,10 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
     @Test
     public void testConvert_137_Win_8240() {
         verify((char) 8240, "्"); // Windows-1252 equiv is ‰
-        // TODO word test Ð‰ for dn
+        verify("Ð‰", "द्न्"); // word test Ð‰ for dn
     }
 
+    @Ignore
     @Test
     public void testConvert_136() {
         verify((char) 136, "़"); // Hindi nukta dot on left, e.g. in qa
@@ -872,7 +893,15 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
 
     @Test
     public void testConvert_136_Win_710() {
-        verify((char) 710, "़"); // Windows-1252 equiv is ˆ
+        // nukta always appears in the following pairs, never by itself
+        // corresponds to unicode 2364 (same as center nukta)
+        // verify pass thru if by itself (b/c replacement order is switched)
+        verify((char) 710, "ˆ"); // Windows-1252 equiv is ˆ
+        verify("ˆk", "क़"); // qa
+        verify("ˆo", "ख़"); // Ka
+        verify("ˆg", "ग़"); // Ga
+        verify("ˆj", "ज़"); // Ja
+        verify("ˆ)", "फ़"); // fa
     }
 
     @Test
@@ -887,6 +916,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 8225, ""); // Windows-1252 equiv is ‡
     }
 
+    @Ignore
     @Test
     public void testConvert_134() {
         verify((char) 134, "दृ"); // dR^i
@@ -894,9 +924,10 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
 
     @Test
     public void testConvert_134_Win_8224() {
-        verify((char) 134, "दृ"); // Windows-1252 equiv is †
+        verify((char) 8224, "दृ"); // Windows-1252 equiv is †
     }
 
+    @Ignore
     @Test
     public void testConvert_133() {
         verify((char) 133, "ु"); // short u e.g. with ph
@@ -907,6 +938,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 8230, "ु"); // Windows-1252 equiv is …
     }
 
+    @Ignore
     @Test
     public void testConvert_132() {
         verify((char) 132, "कॢ"); // kL^i
@@ -917,6 +949,7 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         verify((char) 8222, "कॢ"); // Windows-1252 equiv is „
     }
 
+    @Ignore
     @Test
     public void testConvert_131() {
         // ZERO-WIDTH
@@ -926,9 +959,11 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
     @Test
     public void testConvert_131_Win_402() {
         // ZERO-WIDTH
-        verify((char) 402, "ू"); // Windows-1252 equiv is ƒ
+        verify((char) 402, "ू"); // Windows-1252 equiv is ƒ
+        verify("¼ƒ", "ङ्गू"); // ~NgU
     }
 
+    @Ignore
     @Test
     public void testConvert_130() {
         // ZERO-WIDTH
@@ -938,7 +973,8 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
     @Test
     public void testConvert_130_Win_8218() {
         // ZERO-WIDTH
-        verify((char) 8218, "ङ्गु"); // Windows-1252 equiv is ‚
+        verify((char) 8218, "ु"); // Windows-1252 equiv is ‚
+        verify("¼‚", "ङ्गु"); // ~Ngu
     }
 
     @Test

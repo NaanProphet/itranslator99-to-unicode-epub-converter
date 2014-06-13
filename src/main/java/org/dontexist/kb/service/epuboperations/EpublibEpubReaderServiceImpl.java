@@ -11,20 +11,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Performs I/O operations on ePUBs by using the epublib Java library.
+ * <p>Note: currently, while epublib can open both ePUB 2 and ePUB 3 files, it will save all as ePUB 2.</p>
+ */
 @Service
 @Scope("prototype")
 public class EpublibEpubReaderServiceImpl implements EpubReaderService, InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EpublibEpubReaderServiceImpl.class);
 
-    private static final String EPUB_TEXT_FOLDER = "text";
+    private static final String EPUB2_TEXT_FOLDER = "OEBPS/Text";
+    private static final String EPUB3_TEXT_FOLDER = "text";
     private static final String EPUB_FILE_ENCODING = "UTF-8";
 
     private final EpubReader epubReader = new EpubReader();
@@ -44,7 +48,7 @@ public class EpublibEpubReaderServiceImpl implements EpubReaderService, Initiali
             MediaType mediaType = page.getMediaType();
             // see MediatypeService for list of allowable MediaType s
             System.out.println(qualifiedFilename + " of media type " + mediaType);
-            if (qualifiedFilename.contains(EPUB_TEXT_FOLDER)) {
+            if (qualifiedFilename.contains(EPUB3_TEXT_FOLDER)) {
                 InputStream myInputStream = page.getInputStream();
                 String pageAsString = IOUtils.toString(myInputStream, EPUB_FILE_ENCODING);
                 epubPagesMap.put(page.getHref(), pageAsString);

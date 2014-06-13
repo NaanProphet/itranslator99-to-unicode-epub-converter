@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * Service for performing basic I/O on ePUB files.
+ */
 public interface EpubReaderService {
 
     /**
@@ -32,9 +35,4 @@ public interface EpubReaderService {
      */
     void flushEpub(String outputFilePath) throws IOException;
 
-//    Map<File, String> openEpubFindingTextHtmlFiles(File ithEpub, String unzipPath) throws IOException, ZipException;
-
-//    Collection<File> drillDownFolderForExtension(File folder, boolean isRecursive, String... extensions);
-
-//    StringBuilder convertFileAsOneStringToUnicode(String entireFileAsOneString) throws IOException;
 }

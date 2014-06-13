@@ -31,6 +31,9 @@
 
 package org.dontexist.kb;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,20 +41,17 @@ import java.awt.event.KeyEvent;
 
 /**
  * Simple GUI selector for choosing the type of ePUB conversion. Modeled after the <a
- * href="http://docs.oracle.com/javase/tutorial/uiswing/components/html.html">ButtonHtmlDemo Java example</a>.
- * <p>
- * To trigger the GUI prompt, simply call {@link #displayDialog(java.awt.event.ActionListener)} with your listener to
+ * href="http://docs.oracle.com/javase/tutorial/uiswing/components/html.html">ButtonHtmlDemo Java example</a>. <p> To
+ * trigger the GUI prompt, simply call {@link #displayDialog(java.awt.event.ActionListener)} with your listener to
  * receive the button press event. The {@link java.awt.event.ActionEvent#getActionCommand()} will be the name of the
  * {@link EpubSelectGui.PromptOptions} enum pressed, and can be looked up using {@link
- * EpubSelectGui.PromptOptions#valueOf(String)} without any fear of null pointers.
- * </p>
- * <p>
- * Note: the dialog will automatically close after the first button is pressed.
- * </p>
+ * EpubSelectGui.PromptOptions#valueOf(String)} without any fear of null pointers. </p> <p> Note: the dialog will
+ * automatically close after the first button is pressed. </p>
  */
 public class EpubSelectGui extends JPanel implements ActionListener {
 
-    public static final String WINDOW_TITLE = "Epub Unicode Converter v0.1";
+    private static final String WINDOW_TITLE = "Epub Unicode Converter v0.1";
+    private static final Logger LOGGER = LoggerFactory.getLogger(EpubSelectGui.class);
     private static JFrame frame;
     private final ActionListener outsideListener;
     private JButton b1 = new JButton(), b2 = new JButton(), b3 = new JButton();
@@ -96,7 +96,7 @@ public class EpubSelectGui extends JPanel implements ActionListener {
         });
     }
 
-    private void setupButton(JButton button, PromptOptions option) {
+    private void setupButton(final JButton button, final PromptOptions option) {
         button.setText(option.getDisplayText());
         button.setMnemonic(option.getKeyMnemonic());
         button.setActionCommand(option.getActionCommand());
@@ -113,9 +113,10 @@ public class EpubSelectGui extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
         final String actionCommand = e.getActionCommand();
+        // close the window
         frame.dispose();
-        PromptOptions optionSelected = PromptOptions.valueOf(actionCommand);
-        System.out.println(optionSelected);
+        final PromptOptions optionSelected = PromptOptions.valueOf(actionCommand);
+        LOGGER.debug("Action command pressed is [{}]", optionSelected);
     }
 
     public enum PromptOptions {

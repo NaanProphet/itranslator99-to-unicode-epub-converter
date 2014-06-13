@@ -10,7 +10,25 @@ function convert_to_unicode(input_text) {
 	// special control character additions BEGIN
 	
 	"", // 159
-			
+
+    "š" , // 154_Win_353
+
+    "™" , // 153_Win_8482
+
+    "˜" , // 152_Win_732
+
+    "—" , // 151_Win_8212
+
+    "Œ" , // 140_Win_338
+
+    "‹" , // 139_Win_8249
+
+    "‰" , // 137_Win_8240
+
+    "†" , // 134_Win_8224
+
+    "ƒ" , // 131_Win_402
+
 	"`", "ç", "ð", "¬", "ñ", "Õ", "¶", "í", "¹", "¾", "Æ", "Ó", "Ù",
 
 	"ù", "û", "ü", "ý", "ÿ", "’", "þ", "Ÿ",
@@ -40,7 +58,7 @@ function convert_to_unicode(input_text) {
 	
 	// // matching special additions pair BEGIN
 	
-	"ह्ण",
+	"ह्ण", "᳚", "द्व्य", "द्घ" , "ं" , "ङ्ख" , "क्च" , "्" , "दृ" , "ू" ,
 
 	"ॐ", "म्न", "श्ल", "क्ल", "श्व", "द्र्य", "ग्न", "श्च", "घ्न", "ज्ज", "त्न", "द्ब", "न्त्र",
 
@@ -260,7 +278,7 @@ function convert_to_unicode(input_text) {
 				position_of_R = modified_substring.indexOf("R");
 			} // end of while-01
 
-		} // end of IF statement meant to supress processing of blank string.
+		} // end of IF statement meant to suppress processing of blank string.
 
 	} // end of the function Replace_Symbols
 	

@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 
+/**
+ * Spring factory class for supplying a {@link org.dontexist.kb.service.epuboperations.EpubReaderService}.
+ */
 @Component
 public class EpubReaderServiceFactory {
 

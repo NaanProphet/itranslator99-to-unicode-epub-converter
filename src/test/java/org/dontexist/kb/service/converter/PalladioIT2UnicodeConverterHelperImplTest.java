@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:app-context.xml"})
-public class PalladioIT2UnicodeConverterServiceImplTest {
+public class PalladioIT2UnicodeConverterHelperImplTest {
 
     @Autowired
     private PalladioIT2UnicodeConverterServiceImpl converter;

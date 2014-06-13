@@ -29,16 +29,6 @@ public class JavascriptSanskrit99ToUnicodeServiceImpl extends AbstractText2Unico
 
     private final ClassPathResource classPathResource = new ClassPathResource(SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILENAME);
 
-    /**
-     * Converts Sanskrit99 input to Unicode output.
-     * <p>
-     * 
-     * @param input
-     * @return Unicode output <b>with characters escaped for HTML4<b>!!
-     * @throws IllegalStateException
-     *             if error occurs while attempting to read/call Javascript file
-     *             that is used for conversion
-     */
     @Override
     public String convert(final String input) {
 

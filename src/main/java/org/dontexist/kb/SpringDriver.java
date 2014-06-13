@@ -1,15 +1,15 @@
 package org.dontexist.kb;
 
 import net.lingala.zip4j.exception.ZipException;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.dontexist.kb.service.epuboperations.EpubReaderService;
 import org.dontexist.kb.service.epuboperations.EpubReaderServiceFactory;
-import org.dontexist.kb.service.converter.UnicodeConverterService;
+import org.dontexist.kb.service.converter.UnicodeConverterHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import static org.dontexist.kb.util.FileUtil.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -32,21 +32,13 @@ public class SpringDriver implements ActionListener {
     private EpubReaderServiceFactory epubReaderServiceFactory;
 
     @Autowired
-    private UnicodeConverterService tempService;
+    private UnicodeConverterHelper unicodeConverterHelper;
 
     public void main() throws ZipException, IOException {
         LOGGER.debug("Reached SpringDriver!");
         EpubSelectGui.PromptOptions optionSelected = askUserToSelectConversionType();
         Collection<File> epubsToConvert = fetchEpubsToConvert(optionSelected);
         convertEpub(epubsToConvert);
-    }
-
-    // TODO duplicated method, should be in util
-    private Collection<File> drillDownFolderForExtension(final File folder, final boolean isRecursive, final String... extensions) {
-        @SuppressWarnings("unchecked")
-        Collection<File> filesToConvert = FileUtils.listFiles(folder, extensions, isRecursive);
-        LOGGER.debug("Found in folder [{}] files [{}]", folder, filesToConvert);
-        return filesToConvert;
     }
 
     private Collection<File> fetchEpubsToConvert(final EpubSelectGui.PromptOptions optionSelected) {
@@ -75,7 +67,7 @@ public class SpringDriver implements ActionListener {
             for (Map.Entry<String, String> entry : filesAsStringToConvert.entrySet()) {
                 final String ithHref = entry.getKey();
                 final String ithFileAsOneString = entry.getValue();
-                final StringBuilder convertedFileAsString = tempService.convertFileAsOneStringToUnicode(ithFileAsOneString);
+                final StringBuilder convertedFileAsString = unicodeConverterHelper.convertFileAsOneStringToUnicode(ithFileAsOneString);
 
                 epubReaderService.writeEpubPage(convertedFileAsString.toString(), ithHref);
             }

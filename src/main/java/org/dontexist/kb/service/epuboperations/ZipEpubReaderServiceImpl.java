@@ -16,6 +16,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Performs I/O operations on ePUBs by treating them as zip files. <p>Note: since ePUBs are unzipped and then re-zipped,
+ * this service will preserve with both ePUB2 and ePUB3 formats.</p>
+ */
 @Service
 @Scope("prototype")
 public class ZipEpubReaderServiceImpl implements EpubReaderService {
