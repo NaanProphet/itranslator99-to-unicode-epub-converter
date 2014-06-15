@@ -1,0 +1,5 @@
+wine will save devanagari output text files in Mac OS Roman encoding
+
+e.g. dvya, which is sanskrit99's unicode 153 (control character)
+will map to windows-1252 153 ™
+which will save as mac os roman 153 ô

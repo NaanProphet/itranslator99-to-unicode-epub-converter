@@ -1,0 +1,10 @@
+### Validation Report for src/test/resources/org/dontexist/kb/test.epub ###
+INFO: Validating against EPUB version 2.0
+ERROR: page_styles.css(8,5): 'styles/XXXXXXXXXXXXXXXX': referenced resource missing in the package.
+ERROR: page_styles.css(13,5): 'styles/XXXXXXXXXXXXXXXX': referenced resource missing in the package.
+ERROR: page_styles.css(18,5): 'styles/XXXXXXXXXXXXXXXX': referenced resource missing in the package.
+ERROR: page_styles.css(23,5): 'styles/XXXXXXXXXXXXXXXX': referenced resource missing in the package.
+ERROR: page_styles.css(28,5): 'styles/XXXXXXXXXXXXXXXX': referenced resource missing in the package.
+ERROR: page_styles.css(33,5): 'styles/XXXXXXXXXXXXXXXX': referenced resource missing in the package.
+ERROR: page_styles.css(38,5): 'styles/XXXXXXXXXXXXXXXX': referenced resource missing in the package.
+ERROR: page_styles.css(43,5): 'styles/XXXXXXXXXXXXXXXX': referenced resource missing in the package.

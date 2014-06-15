@@ -28,9 +28,9 @@ public class EpublibTest {
 
     private static final String EPUB_TEXT_FOLDER = "text";
     private static final String EPUB_FILE_ENCODING = "UTF-8";
-    public static final String EPUB_FOLDER = "src/test/resources/org/dontexist/kb/";
-    public static final String FILENAME_IN = EPUB_FOLDER + "test.epub";
-    public static final String FILENAME_OUT = EPUB_FOLDER + "output.test.epub";
+    private static final String EPUB_FOLDER = "src/test/resources/org/dontexist/kb/";
+    private static final String FILENAME_IN = EPUB_FOLDER + "test.epub";
+    private static final String FILENAME_OUT = EPUB_FOLDER + "output.test.epub";
 
     private EpubReader epubReader;
     private EpubWriter epubWriter;

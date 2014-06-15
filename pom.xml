@@ -92,6 +92,11 @@
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.idpf</groupId>
+            <artifactId>epubcheck</artifactId>
+            <version>v4.0.0-alpha4</version>
+        </dependency>
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>junit</groupId>
