@@ -76,7 +76,8 @@ public class SpringDriver implements ActionListener {
             final String outputFilePath = ithEpub.getParent() + "/" + FilenameUtils.getBaseName(ithEpub.getAbsolutePath()) + "-unicode.epub";
             epubReaderService.flushEpub(outputFilePath);
             // validate output ePUB
-            epubValidationService.validate(new File(outputFilePath), new File(outputFilePath + ".txt"));
+            // TODO inject report suffix via property
+            epubValidationService.validate(new File(outputFilePath), new File(outputFilePath + "report.txt"));
         }
     }
 
