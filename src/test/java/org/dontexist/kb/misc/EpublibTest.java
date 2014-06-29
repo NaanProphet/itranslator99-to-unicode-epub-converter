@@ -81,7 +81,13 @@ public class EpublibTest {
         EpubWriter epubWriter = new EpubWriter();
 
         // Write the Book as Epub
-        FileOutputStream out = new FileOutputStream("src/test/java/org/dontexist/kb/misc/test1_book1.epub");
+        final String outputFilePath = "src/test/resources/org/dontexist/kb/misc/test1_book1.epub";
+        File outputFile = new File(outputFilePath);
+        outputFile.delete();
+        // disable deletion if debugging
+        outputFile.deleteOnExit();
+        Assert.assertTrue(!outputFile.exists());
+        FileOutputStream out = new FileOutputStream(outputFile);
         epubWriter.write(bookIn, out);
 
         System.out.println(bookIn);
