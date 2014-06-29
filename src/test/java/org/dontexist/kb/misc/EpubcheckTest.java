@@ -2,7 +2,9 @@ package org.dontexist.kb.misc;
 
 import com.adobe.epubcheck.api.EpubCheck;
 import com.adobe.epubcheck.api.Report;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,7 +19,10 @@ public class EpubcheckTest {
     @Test
     public void epubCheckTest() throws Exception {
         File epubFile = new File(FILENAME_IN);
+        Assert.isTrue(epubFile.exists());
         File reportFile = new File(FILENAME_IN + "report.txt");
+        reportFile.delete();
+        Assert.isTrue(!reportFile.exists());
         OutputStream outputStream = new FileOutputStream(reportFile);
         PrintWriter writer = new PrintWriter(outputStream);
         writer.write("### Validation Report for " + FILENAME_IN + " ###\n");
