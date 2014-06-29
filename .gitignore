@@ -15,3 +15,5 @@ target/
 dependency-reduced-pom.xml
 
 effective-pom.xml
+
+src/test/resources/org/dontexist/kb/test.epubreport.txt
