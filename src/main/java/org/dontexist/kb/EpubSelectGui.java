@@ -50,7 +50,8 @@ import java.awt.event.KeyEvent;
  */
 public class EpubSelectGui extends JPanel implements ActionListener {
 
-    private static final String WINDOW_TITLE = "Epub Unicode Converter v0.1";
+    // TODO inject title
+    private static final String WINDOW_TITLE = "Itranslator99 Unicode ePUB Converter v1.0";
     private static final Logger LOGGER = LoggerFactory.getLogger(EpubSelectGui.class);
     private static JFrame frame;
     private final ActionListener outsideListener;
