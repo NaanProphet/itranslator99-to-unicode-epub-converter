@@ -168,12 +168,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <doCheck>true</doCheck>
-                    <doUpdate>true</doUpdate>
-                    <format>{0,date,yyyyMMdd-HHmm}</format>
-                    <items>
-                        <item>timestamp</item>
-                    </items>
+                    <shortRevisionLength>8</shortRevisionLength>
                 </configuration>
             </plugin>
             <plugin>
@@ -243,6 +238,9 @@
                         <manifest>
                             <mainClass>org.dontexist.kb.EpubDriver</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <git-SHA-1>${buildNumber}</git-SHA-1>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
