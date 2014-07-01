@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.dontexist.kb</groupId>
     <artifactId>itranslator-unicode-epub-converter</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
     <name>Itranslator99 Unicode ePub Converter</name>
     <description>A utility for converting ePubs with text in the Sanskrit99 and URW Palladio IT fonts to their Unicode
