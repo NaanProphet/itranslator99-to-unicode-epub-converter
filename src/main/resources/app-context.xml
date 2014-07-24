@@ -19,12 +19,32 @@
     </bean>
 
     <bean id="epubReaderServiceImplBeanName" class="java.lang.String">
-        <constructor-arg value="${epubReaderType}EpubReaderServiceImpl" />
+        <constructor-arg value="${epubReaderType}EpubReaderServiceImpl"/>
     </bean>
 
     <util:map id="palladioPostReplacementCorrections" map-class="java.util.LinkedHashMap" key-type="java.lang.String"
               value-type="java.lang.String">
         <entry key="fiancī" value="fiancé"/>
+    </util:map>
+
+    <util:map id="sanskrit99PreConvertReplacements" map-class="java.util.LinkedHashMap" key-type="java.lang.String"
+              value-type="java.lang.String">
+
+        <description>
+            Special logic for Sanskrit99, because e.g. "&lt;" and "&amp;" are actually used as
+            characters for replacement. cannot straight up convert unescape and
+            then escape text according to HTML, because then other character
+            (like the en-dash) which previously were not escaped will be escaped
+            and cause problems in Sigil.
+        </description>
+        <!-- yucky: have to escape the characters here because of XML! -->
+
+        <!-- key is &lt; and value is < -->
+        <entry key="&amp;lt;" value="&lt;"/>
+
+        <!-- key is &amp; and value is & -->
+        <entry key="&amp;amp;" value="&amp;"/>
+
     </util:map>
 
 </beans>

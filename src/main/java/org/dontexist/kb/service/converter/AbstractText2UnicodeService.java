@@ -47,10 +47,8 @@ public abstract class AbstractText2UnicodeService {
             int ithBegIndex = indexesOfBegTag.get(i); // <
             int ithEndIndex = indexesOfEndTag.get(i); // >
 
-            String preString = input.substring(ithBegIndex, ithEndIndex + 1); // include
-            // the
-            // >
-            // character
+            // include the > character
+            String preString = input.substring(ithBegIndex, ithEndIndex + 1);
             output.append(preString);
 
             if ((i + 1) != indexesOfBegTag.size()) {

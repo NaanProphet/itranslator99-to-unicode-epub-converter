@@ -21,10 +21,6 @@ abstract class AbstractEpubConverterIT {
 
     protected void verify(File inputfile, File actualOutputFile, File expectedOutputFile) throws IOException, Exception {
         actualOutputFile.deleteOnExit();
-        // StringBuilder convertedFileAsString = (StringBuilder)
-        // ReflectionTestUtils.invokeMethod(springDriver,
-        // "convertFileToUnicode",
-        // inputfile);
         StringBuilder convertedFileAsString = unicodeConverterHelper.convertFileAsOneStringToUnicode(FileUtils.readFileToString(inputfile));
         FileUtils.writeStringToFile(actualOutputFile, convertedFileAsString.toString());
         FileAssert.assertEquals(expectedOutputFile, actualOutputFile);

@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -17,6 +18,7 @@ import javax.script.ScriptException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,9 @@ public class JavascriptSanskrit99ToUnicodeServiceImpl extends AbstractText2Unico
     private static final Logger LOGGER = LoggerFactory.getLogger(JavascriptSanskrit99ToUnicodeServiceImpl.class);
 
     private final ClassPathResource classPathResource = new ClassPathResource(SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILENAME);
+
+    @Value("#{sanskrit99PreConvertReplacements}")
+    private Map<String, String> sanskrit99PreConvertReplacements;
 
     @Override
     public String convert(final String input) {
@@ -78,16 +83,13 @@ public class JavascriptSanskrit99ToUnicodeServiceImpl extends AbstractText2Unico
 
     @Override
     public String convertHtmlBlock(String input) {
-        // special logic for Sanskrit99, because "<" is actually used as a
-        // character for replacement. cannot straight up convert unescape and
+        // special logic for Sanskrit99, because "<" and "&" are actually used as
+        // characters for replacement. cannot straight up convert unescape and
         // then escape text according to HTML, because then other character
         // (like the en-dash) which previously were not escaped will be escaped
         // and cause problems in Sigil.
 
-        Map<String, String> replacements = new LinkedHashMap<String, String>();
-        replacements.put("&lt;", "<");
-
-        String output = convertHtmlBlockWithSpecialReplacements(input, replacements);
+        String output = convertHtmlBlockWithSpecialReplacements(input, sanskrit99PreConvertReplacements);
         return output;
     }
 

@@ -30,28 +30,28 @@ public class PalladioIT2UnicodeConverterHelperImplTest {
     // ----------- WORD CONVERSION TESTS -------------
 
     @Test
-    public void testConvert1() {
+    public void testConvert_Word1() {
         String input = "vivähadinamidaà bhavatu harñadam,";
         String expected = "vivāhadinamidaṁ bhavatu harṣadam,";
         verify(input, expected);
     }
 
     @Test
-    public void testConvert2() {
+    public void testConvert_Word2() {
         String input = "kasyacidapi sambandhasya-ädhäro yadi laukikas-tarhi sa bandhana-käraka, ädhyätmikastu mukti-däyako bhavati. – Jivansüträëi 5.5";
         String expected = "kasyacidapi sambandhasya-ādhāro yadi laukikas-tarhi sa bandhana-kāraka, ādhyātmikastu mukti-dāyako bhavati. – Jivansūtrāṇi 5.5";
         verify(input, expected);
     }
 
     @Test
-    public void testConvert4() {
+    public void testConvert_Word3() {
         String input = "Jïänänanda";
         String expected = "Jñānānanda";
         verify(input, expected);
     }
 
     @Test
-    public void testConvert5() {
+    public void testConvert_Word4() {
         String input = "Jïänänanda fiancé";
         String expected = "Jñānānanda fiancé";
         verify(input, expected);
@@ -60,9 +60,25 @@ public class PalladioIT2UnicodeConverterHelperImplTest {
     // ----------- HTML BLOCK CONVERSION TESTS ------------
 
     @Test
-    public void testConvert3() {
+    public void testConvert_Html1() {
         String input = "<div class=\"italictext2\">\n    <sup class=\"calibre6\"><a href=\"../Text/part0007.html#ch2_n1\" id=\"ch2_no1\">1</a></sup>&nbsp; kasyacidapi sambandhasya-ädhäro yadi laukikas-tarhi sa bandhana-käraka, ädhyätmikastu mukti-däyako bhavati. – Jivansüträëi 5.5\n  </div>";
         String expected = "<div class=\"italictext2\">\n    <sup class=\"calibre6\"><a href=\"../Text/part0007.html#ch2_n1\" id=\"ch2_no1\">1</a></sup>&nbsp; kasyacidapi sambandhasya-ādhāro yadi laukikas-tarhi sa bandhana-kāraka, ādhyātmikastu mukti-dāyako bhavati. – Jivansūtrāṇi 5.5\n  </div>";
+        verifyHtml(input, expected);
+    }
+
+    @Test
+    public void testConvert_Html2() {
+        // test pass-thru
+        String input = "<sup class=\"calibre4\"><a id=\"ch1_n1\" href=\"part0003.html#ch1_no1\">1</a></sup>";
+        String expected = input;
+        verifyHtml(input, expected);
+    }
+
+    @Test
+    public void testConvert_Html3() {
+        // test pass-thru
+        String input = "<span class=\"size4\">, the </span>";
+        String expected = input;
         verifyHtml(input, expected);
     }
 

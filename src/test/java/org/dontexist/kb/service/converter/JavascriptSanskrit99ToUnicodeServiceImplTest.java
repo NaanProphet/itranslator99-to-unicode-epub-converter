@@ -4,12 +4,19 @@ import static junit.framework.Assert.assertEquals;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.UnsupportedEncodingException;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:app-context.xml"})
 public class JavascriptSanskrit99ToUnicodeServiceImplTest {
 
-    private JavascriptSanskrit99ToUnicodeServiceImpl converter = new JavascriptSanskrit99ToUnicodeServiceImpl();
+    @Autowired
+    private JavascriptSanskrit99ToUnicodeServiceImpl converter;
 
     // ----------- HELPER METHODS --------------------
 
@@ -103,6 +110,23 @@ public class JavascriptSanskrit99ToUnicodeServiceImplTest {
         String input = "k«:[";
         String expected = "कृष्ण";
         verify(input, expected);
+    }
+
+    @Test
+    public void testConvertHtmlBlock4_FromMrityunjaya() {
+        String input = "<span class=\"sans\">` ÈyMbk&lt; yjamhe sugiNx&lt; puiòvxRnm!,</span>";
+        String expected = "<span class=\"sans\">ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्।</span>";
+        verifyHtml(input, expected);
+
+    }
+
+    @Test
+    public void testConvertHtmlBlock5_FromMrityunjaya() {
+        // note: akshara bridge messes up converting the "yae" in bNxnaNm&amp;TyaemuR]Iy back to ITRANS but it's actually correct!
+        String input = "<span class=\"sans\">` ÈyMbk&lt; yjamhe sugiNx&lt; puiòvxRnm!,<br class=\"line-height\" />  %vaRékimv bNxnaNm&amp;TyaemuR]Iy ma=m&amp;tat! .</span>";
+        String expected = "<span class=\"sans\">ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्।<br class=\"line-height\" />  उर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय माऽमृतात् ॥</span>";
+        verifyHtml(input, expected);
+
     }
 
     // ----------- CHARACTER CONVERSION TESTS -------------
