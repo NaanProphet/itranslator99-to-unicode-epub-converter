@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class JavascriptSanskrit99ToUnicodeServiceImpl extends AbstractText2UnicodeService implements Sanskrit99ToUnicodeService {
 
     private static final String JAVASCRIPT_METHOD_NAME = "convert_to_unicode";
-    private static final String SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILENAME = "sanskrit99_to_unicode.js";
+    private static final String SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILENAME = "/sanskrit99_to_unicode.js";
     private static final Logger LOGGER = LoggerFactory.getLogger(JavascriptSanskrit99ToUnicodeServiceImpl.class);
 
     private final ClassPathResource classPathResource = new ClassPathResource(SANSKRIT99_TO_UNICODE_JAVASCRIPT_FILENAME);
