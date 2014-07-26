@@ -9,7 +9,7 @@
 
     <context:component-scan base-package="org.dontexist.kb.service"/>
 
-    <bean id="springDriver" class="org.dontexist.kb.SpringDriver"/>
+    <bean id="springDelegateDriver" class="org.dontexist.kb.SpringDelegateDriver"/>
 
     <bean
             class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

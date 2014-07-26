@@ -22,9 +22,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-public class SpringDriver implements ActionListener {
+public class SpringDelegateDriver implements ActionListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpringDriver.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringDelegateDriver.class);
     private final CountDownLatch userSelectionLatch = new CountDownLatch(1);
     @Value("${delete.temp.extracted.folder}")
     private boolean isDeleteTempFiles;
@@ -37,7 +37,7 @@ public class SpringDriver implements ActionListener {
     private EpubValidationService epubValidationService;
 
     public void main() throws ZipException, IOException {
-        LOGGER.debug("Reached SpringDriver!");
+        LOGGER.debug("Reached SpringDelegateDriver!");
         EpubSelectGui.PromptOptions optionSelected = askUserToSelectConversionType();
         Collection<File> epubsToConvert = fetchEpubsToConvert(optionSelected);
         convertEpub(epubsToConvert);

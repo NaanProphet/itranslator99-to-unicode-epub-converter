@@ -22,8 +22,8 @@ public class EpubDriver {
             context = new ClassPathXmlApplicationContext("/app-context.xml");
             LOGGER.debug("Spring context initialized.");
 
-            SpringDriver springDriver = (SpringDriver) context.getBean("springDriver");
-            springDriver.main();
+            SpringDelegateDriver springDelegateDriver = (SpringDelegateDriver) context.getBean("springDelegateDriver");
+            springDelegateDriver.main();
         } finally {
             if (context != null) {
                 context.close();

@@ -2,7 +2,7 @@ package org.dontexist.kb.integration;
 
 import junitx.framework.FileAssert;
 import org.apache.commons.io.FileUtils;
-import org.dontexist.kb.SpringDriver;
+import org.dontexist.kb.SpringDelegateDriver;
 import org.dontexist.kb.service.converter.UnicodeConverterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
 abstract class AbstractEpubConverterIT {
 
     @Autowired
-    protected SpringDriver springDriver;
+    protected SpringDelegateDriver springDelegateDriver;
 
     @Autowired
     protected UnicodeConverterHelper unicodeConverterHelper;
