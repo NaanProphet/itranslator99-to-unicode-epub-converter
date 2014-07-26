@@ -11,6 +11,8 @@ import java.io.File;
 @ContextConfiguration("/app-context.xml")
 public class EpubConverter_MarriageAMelody_IT extends AbstractEpubConverterIT {
 
+    private final boolean deleteOutputFile = true;
+
     @Test
     public void testConvertFileAsOneStringToUnicode_Unchanged1() throws Exception {
         // this file contains no eligible characters (Sanskrit99 or Palladio IT)
@@ -19,7 +21,7 @@ public class EpubConverter_MarriageAMelody_IT extends AbstractEpubConverterIT {
         File inputfile = new File("src/test/resources/org/dontexist/kb/part0005.html");
         File actualOutputFile = new File("src/test/resources/org/dontexist/kb/part0005.html.out");
         File expectedOutputFile = inputfile;
-        verify(inputfile, actualOutputFile, expectedOutputFile);
+        verify(inputfile, actualOutputFile, expectedOutputFile, deleteOutputFile);
     }
 
     @Test
@@ -28,7 +30,7 @@ public class EpubConverter_MarriageAMelody_IT extends AbstractEpubConverterIT {
         File inputfile = new File("src/test/resources/org/dontexist/kb/part0006.html");
         File actualOutputFile = new File("src/test/resources/org/dontexist/kb/part0006.html.out");
         File expectedOutputFile = new File("src/test/resources/org/dontexist/kb/part0006.html.expected");
-        verify(inputfile, actualOutputFile, expectedOutputFile);
+        verify(inputfile, actualOutputFile, expectedOutputFile, deleteOutputFile);
     }
 
 }

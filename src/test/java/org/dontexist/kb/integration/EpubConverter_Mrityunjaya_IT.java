@@ -11,6 +11,8 @@ import java.io.File;
 @ContextConfiguration("/app-context.xml")
 public class EpubConverter_Mrityunjaya_IT extends AbstractEpubConverterIT {
 
+    private final boolean deleteOutputFile = true;
+
     @Test
     public void testConvertFileAsOneStringToUnicode_Unchanged1() throws Exception {
         // this file contains no eligible characters (Sanskrit99 or Palladio IT)
@@ -19,16 +21,16 @@ public class EpubConverter_Mrityunjaya_IT extends AbstractEpubConverterIT {
         File inputfile = new File("src/test/resources/org/dontexist/kb/mrit.part0003.trim.xml");
         File actualOutputFile = new File("src/test/resources/org/dontexist/kb/mrit.part0003.trim.xml.out");
         File expectedOutputFile = inputfile;
-        verify(inputfile, actualOutputFile, expectedOutputFile);
+        verify(inputfile, actualOutputFile, expectedOutputFile, deleteOutputFile);
     }
 
-//    @Test
-//    public void testConvertFileAsOneStringToUnicode_Convert1() throws Exception {
-//        // sample from "Marriage A Melody" containing Sanskrit99 and PalladioIT
-//        File inputfile = new File("src/test/resources/org/dontexist/kb/part0006.html");
-//        File actualOutputFile = new File("src/test/resources/org/dontexist/kb/part0006.html.out");
-//        File expectedOutputFile = new File("src/test/resources/org/dontexist/kb/part0006.html.expected");
-//        verify(inputfile, actualOutputFile, expectedOutputFile);
-//    }
+    @Test
+    public void testConvertFileAsOneStringToUnicode_Convert1() throws Exception {
+        // sample from "Maha Mrityunjaya Mantra" containing Sanskrit99 and PalladioIT, copyright CCMT
+        File inputfile = new File("src/test/resources/org/dontexist/kb/mrit.part0003.xml");
+        File actualOutputFile = new File("src/test/resources/org/dontexist/kb/mrit.part0003.xml.out");
+        File expectedOutputFile = new File("src/test/resources/org/dontexist/kb/mrit.part0003.xml.expected");
+        verify(inputfile, actualOutputFile, expectedOutputFile, deleteOutputFile);
+    }
 
 }

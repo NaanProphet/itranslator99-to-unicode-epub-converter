@@ -43,67 +43,71 @@ public class UnicodeConverterHelper implements InitializingBean {
 
 
     public StringBuilder convertFileAsOneStringToUnicode(final String entireFileAsOneString) throws IOException {
-        // do not escape html characters yet, because we need to split
-        // based on tags
-        StringBuilder outputStringy = new StringBuilder();
+        // delegate escaping of html characters to conversion service, because we need to split based on the  tags
+        final StringBuilder convertedOutputAsOneString = new StringBuilder();
         int fromIndex = 0;
         while (true) {
-            int spanStart = entireFileAsOneString.indexOf(SPAN_START_TAG, fromIndex);
+            final int spanStart = entireFileAsOneString.indexOf(SPAN_START_TAG, fromIndex);
             final boolean isNoStartingSpanTagFound = spanStart == -1;
             if (isNoStartingSpanTagFound) {
                 // flush out rest of file and quit
-                String restOfFile = entireFileAsOneString.substring(fromIndex);
-                String convertedRestOfFile = romanizedSanskritConverter.convertHtmlBlock(restOfFile);
-                outputStringy.append(convertedRestOfFile);
+                final String restOfFile = entireFileAsOneString.substring(fromIndex);
+                final String convertedRestOfFile = romanizedSanskritConverter.convertHtmlBlock(restOfFile);
+                convertedOutputAsOneString.append(convertedRestOfFile);
                 break;
             }
-            String partBeforeSpan = entireFileAsOneString.substring(fromIndex, spanStart);
+            final String partBeforeSpan = entireFileAsOneString.substring(fromIndex, spanStart);
             // assumption: sanskrit99 text will never be outside of span block, but palladio might
-            String convertedPartBeforeSpan = romanizedSanskritConverter.convertHtmlBlock(partBeforeSpan);
-            outputStringy.append(convertedPartBeforeSpan);
+            final String convertedPartBeforeSpan = spanContainerService.getDefaultUnicodeConverter().convertHtmlBlock(partBeforeSpan);
+            convertedOutputAsOneString.append(convertedPartBeforeSpan);
 
-
-            int spanEnd = entireFileAsOneString.indexOf(SPAN_END_TAG, spanStart);
-            int beginIndex = spanStart;
-            int endIndex = spanEnd + SPAN_END_TAG.length();
-            final StringBuilder spanString = new StringBuilder(entireFileAsOneString.substring(beginIndex, endIndex));
-
-            // check for nested span elements
-            int numSpanStarts = countMatches(spanString, SPAN_START_TAG);
-            int numSpanEnds = countMatches(spanString, SPAN_END_TAG);
-            // TODO refactor this
-            int newEndIndex = endIndex;
-            while (numSpanStarts != numSpanEnds) {
-                // continue looking for the end span tag
-                int newSpanStart = endIndex;
-                int newSpanEnd = entireFileAsOneString.indexOf(SPAN_END_TAG, newSpanStart);
-                int newBeginIndex = newSpanStart;
-                newEndIndex = newSpanEnd + SPAN_END_TAG.length();
-                String appendMe = entireFileAsOneString.substring(newBeginIndex, newEndIndex);
-                spanString.append(appendMe);
-                numSpanStarts = countMatches(spanString, SPAN_START_TAG);
-                numSpanEnds = countMatches(spanString, SPAN_END_TAG);
-            }
+            // loop to find entire span block, possibly returning nested span blocks
+            final String spanString = readForCompleteSpanBlock(entireFileAsOneString, spanStart);
 
             // split span string with parser
-            final StringBuilder convertedSpanString = new StringBuilder();
-            List<ParseContainer> textBlocks = splitUpSpanString(spanString.toString());
-            for (ParseContainer entry : textBlocks) {
-                final String textToConvert = entry.getRawText();
-                final Text2UnicodeService converter = entry.getConverter();
-                final String convertedText = entry.isHtmlTag() ? converter.convertHtmlBlock(textToConvert) : converter.convert(textToConvert);
-                convertedSpanString.append(convertedText);
-            }
-
-            // prepare for next iteration
-            fromIndex = newEndIndex;
+            final List<ParseContainer> textBlocks = splitUpSpanString(spanString.toString());
+            final StringBuilder convertedSpanString = convertSpanTextBlocks(textBlocks);
 
             // flush work
-            outputStringy.append(convertedSpanString);
+            convertedOutputAsOneString.append(convertedSpanString);
+
+            // prepare for next iteration
+            fromIndex = spanStart + spanString.length();
         }
         // add final newline at end to make files identical
-        outputStringy.append("\n");
-        return outputStringy;
+        convertedOutputAsOneString.append("\n");
+        return convertedOutputAsOneString;
+    }
+
+    private StringBuilder convertSpanTextBlocks(List<ParseContainer> textBlocks) {
+        final StringBuilder convertedSpanString = new StringBuilder();
+        for (ParseContainer entry : textBlocks) {
+            final String textToConvert = entry.getRawText();
+            final Text2UnicodeService converter = entry.getConverter();
+            final String convertedText = entry.isHtmlTag() ? converter.convertHtmlBlock(textToConvert) : converter.convert(textToConvert);
+            convertedSpanString.append(convertedText);
+        }
+        return convertedSpanString;
+    }
+
+    private String readForCompleteSpanBlock(String entireFileAsOneString, int spanStart) {
+        final StringBuilder spanString = new StringBuilder();
+        int newEndIndex = spanStart;
+        int numSpanStarts = 0;
+        int numSpanEnds = 0;
+        do {
+            // continue looking for the end span tag
+            final int newSpanStart = newEndIndex;
+            final int newSpanEnd = entireFileAsOneString.indexOf(SPAN_END_TAG, newSpanStart);
+            final int newBeginIndex = newSpanStart;
+            newEndIndex = newSpanEnd + SPAN_END_TAG.length();
+            final String portionOfSpanBlockFound = entireFileAsOneString.substring(newBeginIndex, newEndIndex);
+            spanString.append(portionOfSpanBlockFound);
+            // check count of nested span elements
+            numSpanStarts = countMatches(spanString, SPAN_START_TAG);
+            numSpanEnds = countMatches(spanString, SPAN_END_TAG);
+        } while (numSpanStarts != numSpanEnds);
+        return spanString.toString();
     }
 
     List<ParseContainer> splitUpSpanString(final String spanString) {
