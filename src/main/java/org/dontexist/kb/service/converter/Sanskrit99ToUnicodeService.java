@@ -1,6 +1,6 @@
 package org.dontexist.kb.service.converter;
 
-public interface Sanskrit99ToUnicodeService {
+public interface Sanskrit99ToUnicodeService extends Text2UnicodeService {
 
     /**
      * Converts Sanskrit99 input to Unicode output.

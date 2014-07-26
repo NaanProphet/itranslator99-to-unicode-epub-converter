@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 /**
  * Common class for converting text in various encodings into Unicode.
  */
-public abstract class AbstractText2UnicodeService {
+public abstract class AbstractText2UnicodeService implements Text2UnicodeService {
 
     /**
      * Performs the Unicode conversion.
@@ -31,37 +31,39 @@ public abstract class AbstractText2UnicodeService {
         return indexes;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public String convertHtmlBlock(final String input) {
         return convertHtmlBlockWithSpecialReplacements(input, MapUtils.EMPTY_SORTED_MAP);
     }
 
     String convertHtmlBlockWithSpecialReplacements(final String input, final Map<String, String> replacements) {
-        List<Integer> indexesOfBegTag = findAllIndexOf(input, "<");
-        List<Integer> indexesOfEndTag = findAllIndexOf(input, ">");
+        final List<Integer> indexesOfBegTag = findAllIndexOf(input, "<");
+        final List<Integer> indexesOfEndTag = findAllIndexOf(input, ">");
         Assert.isTrue(indexesOfBegTag.size() == indexesOfEndTag.size(),
                 "Mismatched number of < and > tags! Was a complete HTML tag passed in?");
 
-        StringBuilder output = new StringBuilder();
+        final StringBuilder output = new StringBuilder();
         for (int i = 0; i < indexesOfBegTag.size(); i++) {
-            int ithBegIndex = indexesOfBegTag.get(i); // <
-            int ithEndIndex = indexesOfEndTag.get(i); // >
+            final int ithBegIndex = indexesOfBegTag.get(i); // <
+            final int ithEndIndex = indexesOfEndTag.get(i); // >
 
-            // include the > character
-            String preString = input.substring(ithBegIndex, ithEndIndex + 1);
+            // add 1 to the endIndex to include the > character in the substring
+            final String preString = input.substring(ithBegIndex, ithEndIndex + 1);
+
             output.append(preString);
 
             if ((i + 1) != indexesOfBegTag.size()) {
-                String preConvertString = input.substring(ithEndIndex + 1, indexesOfBegTag.get(i + 1));
+                final String preConvertString = input.substring(ithEndIndex + 1, indexesOfBegTag.get(i + 1));
 
                 // perform special replacements on HTML body, if necessary (e.g.
                 // in Sanskrit99 the "<" is used and will be written as "&lt;"
                 // in the HTML block but it cannot be replaced before because
                 // then it would throw off the beginning- and end-tag search
                 // logic
-                String convertString = performSpecialReplacements(preConvertString, replacements);
+                final String convertString = performSpecialReplacements(preConvertString, replacements);
 
-                String convertedString = convert(convertString);
+                final String convertedString = convert(convertString);
                 output.append(convertedString);
             }
 
@@ -79,7 +81,7 @@ public abstract class AbstractText2UnicodeService {
      *                         values
      * @return the replaced text
      */
-    private String performSpecialReplacements(final String preConvertString, final Map<String, String> replacements) {
+    protected String performSpecialReplacements(final String preConvertString, final Map<String, String> replacements) {
         String replacedString = preConvertString; // initialization
         for (Entry<String, String> entry : replacements.entrySet()) {
             String from = entry.getKey();

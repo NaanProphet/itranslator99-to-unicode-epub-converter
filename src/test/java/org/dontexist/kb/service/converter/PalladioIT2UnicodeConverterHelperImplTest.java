@@ -82,6 +82,14 @@ public class PalladioIT2UnicodeConverterHelperImplTest {
         verifyHtml(input, expected);
     }
 
+    @Test
+    public void testConvert_Html4() {
+        // test pass-thru of nested span blocks
+        String input = "<p class=\"size7\"><span>Practise this every day for 10 minutes. Be regular and be sincere. Steadily and slowly increase the duration of your <span class=\"pali\">japa</span>. See what happens.</span></p>";
+        String expected = input;
+        verifyHtml(input, expected);
+    }
+
     // ----------- CHARACTER CONVERSION TESTS -------------
 
     // @formatter:off

@@ -20,7 +20,7 @@ abstract class AbstractEpubConverterIT {
     // --------------- HELPER METHODS -----------------
 
     protected void verify(File inputfile, File actualOutputFile, File expectedOutputFile) throws IOException, Exception {
-        actualOutputFile.deleteOnExit();
+//        actualOutputFile.deleteOnExit();
         StringBuilder convertedFileAsString = unicodeConverterHelper.convertFileAsOneStringToUnicode(FileUtils.readFileToString(inputfile));
         FileUtils.writeStringToFile(actualOutputFile, convertedFileAsString.toString());
         FileAssert.assertEquals(expectedOutputFile, actualOutputFile);

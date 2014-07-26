@@ -89,8 +89,10 @@ public class JavascriptSanskrit99ToUnicodeServiceImpl extends AbstractText2Unico
         // (like the en-dash) which previously were not escaped will be escaped
         // and cause problems in Sigil.
 
-        String output = convertHtmlBlockWithSpecialReplacements(input, sanskrit99PreConvertReplacements);
-        return output;
+//        String output = convertHtmlBlockWithSpecialReplacements(input, sanskrit99PreConvertReplacements);
+        final String convertString = performSpecialReplacements(input, sanskrit99PreConvertReplacements);
+        final String convertedString = convert(convertString);
+        return convertedString;
     }
 
 }
