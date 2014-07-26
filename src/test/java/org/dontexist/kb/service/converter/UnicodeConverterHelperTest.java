@@ -223,4 +223,63 @@ public class UnicodeConverterHelperTest {
 
         assertFalse(it.hasNext());
     }
+
+    @Test
+    public void testDontGetTwoClosingSpansAtEnd() throws Exception {
+
+        final String s1 = "<p class=\"size7\">";
+        final String s2 = "<span>";
+        final String s3 = "Practise this every day for 10 minutes. Be regular and be sincere. Steadily and slowly increase the duration of your ";
+        final String s4 = "<span class=\"pali\">";
+        final String s5 = "japa";
+        final String s6 = "</span>";
+        final String s7 = ". See what happens.";
+        final String s8 = "</span>";
+        final String s9 = "</p>";
+        final String input = s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8 + s9;
+
+        final List<ParseContainer> textBlocks = unicodeConverterHelperReal.splitUpSpanString(input);
+        assertEquals(9, textBlocks.size());
+        Iterator<ParseContainer> it = textBlocks.iterator();
+
+        ParseContainer value = it.next();
+        assertEquals(s1, value.getRawText());
+        assertEquals(unicodeConverterHelperReal.getRomanizedSanskritConverter(), value.getConverter());
+
+        value = it.next();
+        assertEquals(s2, value.getRawText());
+        assertEquals(unicodeConverterHelperReal.getRomanizedSanskritConverter(), value.getConverter());
+
+        value = it.next();
+        assertEquals(s3, value.getRawText());
+        assertEquals(unicodeConverterHelperReal.getRomanizedSanskritConverter(), value.getConverter());
+
+        value = it.next();
+        assertEquals(s4, value.getRawText());
+        assertEquals(unicodeConverterHelperReal.getRomanizedSanskritConverter(), value.getConverter());
+
+        value = it.next();
+        assertEquals(s5, value.getRawText());
+        assertEquals(unicodeConverterHelperReal.getRomanizedSanskritConverter(), value.getConverter());
+
+        value = it.next();
+        assertEquals(s6, value.getRawText());
+        assertEquals(unicodeConverterHelperReal.getRomanizedSanskritConverter(), value.getConverter());
+
+        value = it.next();
+        assertEquals(s7, value.getRawText());
+        assertEquals(unicodeConverterHelperReal.getRomanizedSanskritConverter(), value.getConverter());
+
+        value = it.next();
+        assertEquals(s8, value.getRawText());
+        assertEquals(unicodeConverterHelperReal.getRomanizedSanskritConverter(), value.getConverter());
+
+        value = it.next();
+        assertEquals(s9, value.getRawText());
+        assertEquals(unicodeConverterHelperReal.getRomanizedSanskritConverter(), value.getConverter());
+
+        assertFalse(it.hasNext());
+
+
+    }
 }

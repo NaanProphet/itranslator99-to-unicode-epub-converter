@@ -96,7 +96,7 @@ public class UnicodeConverterHelper implements InitializingBean {
             }
 
             // prepare for next iteration
-            fromIndex = endIndex;
+            fromIndex = newEndIndex;
 
             // flush work
             outputStringy.append(convertedSpanString);
@@ -216,9 +216,14 @@ public class UnicodeConverterHelper implements InitializingBean {
         public void visitStringNode(Text string) {
             final String text = string.getText();
             final Text2UnicodeService converter = spanConverters.peek();
-            // always treat sanskrit99 text as "HTML" so that &lt; gets replaced by < before converstion
-            final boolean treatAsHtmlTag = converter instanceof Sanskrit99ToUnicodeService;
-            ParseContainer entry = new ParseContainer(text, converter, treatAsHtmlTag);
+            // perform replacements on sanskrit99 text so that e.g. &lt; gets replaced by < before conversion
+            String finalText = text;
+            if (converter instanceof Sanskrit99ToUnicodeService) {
+                finalText = devanagariSanskritConverter.performPreConvertReplacements(text);
+
+            }
+            final boolean treatAsHtmlTag = false;
+            ParseContainer entry = new ParseContainer(finalText, converter, treatAsHtmlTag);
             textBlocks.add(entry);
         }
 

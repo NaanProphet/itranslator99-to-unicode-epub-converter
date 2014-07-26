@@ -16,4 +16,5 @@ public interface Sanskrit99ToUnicodeService extends Text2UnicodeService {
 
     String convertHtmlBlock(String input);
 
+    String performPreConvertReplacements(String input);
 }
