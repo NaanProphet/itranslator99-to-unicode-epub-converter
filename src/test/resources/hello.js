@@ -1,1 +1,1 @@
-println("Welcome to java world from function");
+print("Welcome to java world from function");
