@@ -6,6 +6,7 @@ import org.dontexist.kb.service.epuboperations.EpubReaderService;
 import org.dontexist.kb.service.epuboperations.EpubReaderServiceFactory;
 import org.dontexist.kb.service.converter.UnicodeConverterHelper;
 import org.dontexist.kb.service.epuboperations.EpubValidationService;
+import org.dontexist.kb.swing.EpubSelectGui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

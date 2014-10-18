@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.dontexist.kb;
+package org.dontexist.kb.swing;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
