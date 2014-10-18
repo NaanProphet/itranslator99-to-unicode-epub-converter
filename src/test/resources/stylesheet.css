@@ -1,0 +1,177 @@
+.bodySanskrit {
+    font-family: "Sanskrit99"
+    }
+.bodySanskrit1 {
+    font-family: "Sanskrit99";
+    font-size: 1.125em;
+    line-height: 1.2
+    }
+.bodytext {
+    font-family: "Optima";
+    font-size: 0.75em
+    }
+.bodytext1 {
+    font-family: "Urw_Palladio_It";
+    font-size: 0.75em
+    }
+.bodytext2 {
+    font-family: "Optima";
+    font-size: 1.66667em;
+    line-height: 1.2
+    }
+.bodytext3 {
+    font-family: "Optima_Bold";
+    font-size: 0.75em;
+    font-weight: bold
+    }
+.bodytext4 {
+    font-family: "Urw_Palladio_It_Bold";
+    font-size: 1.41667em;
+    font-weight: bold;
+    line-height: 1.2
+    }
+.bodytext5 {
+    font-family: "Urw_Palladio_It"
+    }
+.bodytext6 {
+    font-family: "Urw_Palladio_It_Bold";
+    font-weight: bold
+    }
+.bodytext7 {
+    font-family: "Urw_Palladio_It_Bold";
+    font-size: 1em;
+    font-weight: bold
+    }
+.bodytext8 {
+    font-family: "Urw_Palladio_It_Bold_Italic";
+    font-size: 1em;
+    font-style: italic;
+    font-weight: bold
+    }
+.bodytext9 {
+    font-family: "Urw_Palladio_It";
+    font-size: 1em
+    }
+.bodytextnew {
+    font-weight: normal
+    }
+.calibre {
+    display: block;
+    font-family: urw_palladio_normal;
+    font-size: 1em;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0 5pt
+    }
+.calibre1 {
+    height: auto;
+    width: auto
+    }
+.calibre2 {
+    font-family: Urw_Palladio_It;
+    font-size: 0.58333em;
+    line-height: 1.2;
+    vertical-align: super
+    }
+.calibre3 {
+    display: block;
+    margin: 1em 0
+    }
+.calibre4 {
+    display: table-row;
+    vertical-align: middle
+    }
+.calibre5 {
+    display: table-cell;
+    text-align: inherit;
+    vertical-align: inherit;
+    padding: 1px
+    }
+.calibre6 {
+    display: block;
+    text-align: center
+    }
+.calibre7 {
+    height: 100%;
+    width: auto
+    }
+.calibre8 {
+    display: block
+    }
+.center {
+    display: block;
+    padding-bottom: 50px;
+    padding-top: 50px;
+    text-align: center
+    }
+.center1 {
+    display: block;
+    text-align: center
+    }
+.center2 {
+    display: block;
+    text-align: center;
+    margin: 1em 0
+    }
+.center3 {
+    display: block;
+    padding-top: 50px;
+    text-align: center
+    }
+.gery {
+    color: #6D6E71;
+    display: block;
+    text-align: center
+    }
+.italictext {
+    font-family: "Urw_Palladio_It_Italic";
+    font-style: italic
+    }
+.italictext1 {
+    font-family: "Urw_Palladio_It_Italic";
+    font-size: 1em;
+    font-style: italic
+    }
+.just {
+    display: block;
+    text-align: justify
+    }
+.just1 {
+    display: block;
+    font-size: 1em;
+    text-align: justify;
+    margin: 1em 0
+    }
+.just2 {
+    display: block;
+    font-size: 1em;
+    text-align: justify;
+    text-indent: 30px;
+    margin: 1em 0
+    }
+.just3 {
+    display: block;
+    text-align: justify;
+    margin: 1em 0
+    }
+.lh {
+    display: block
+    }
+.mar {
+    border-collapse: separate;
+    border-spacing: 2px;
+    display: table;
+    margin-bottom: 0;
+    margin-left: 30px;
+    margin-top: 0;
+    text-indent: 0
+    }
+.right {
+    display: block;
+    text-align: right
+    }
+.size {
+    display: block;
+    font-size: 1em;
+    margin: 1em 0
+    }
