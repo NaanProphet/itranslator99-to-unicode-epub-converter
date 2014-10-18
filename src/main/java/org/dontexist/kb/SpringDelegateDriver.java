@@ -22,6 +22,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * "Driver" class that is invoked after the Spring application context is built.
+ */
 public class SpringDelegateDriver implements ActionListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringDelegateDriver.class);
@@ -36,6 +39,11 @@ public class SpringDelegateDriver implements ActionListener {
     @Autowired
     private EpubValidationService epubValidationService;
 
+    /**
+     * The method that starts eBook conversion.
+     * @throws ZipException
+     * @throws IOException
+     */
     public void main() throws ZipException, IOException {
         LOGGER.debug("Reached SpringDelegateDriver!");
         EpubSelectGui.PromptOptions optionSelected = askUserToSelectConversionType();

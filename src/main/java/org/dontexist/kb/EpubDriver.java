@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+/**
+ * The main class that should be invoked from the command line to launch the program.
+ */
 public class EpubDriver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EpubDriver.class);
