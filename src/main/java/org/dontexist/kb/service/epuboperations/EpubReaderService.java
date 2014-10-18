@@ -1,12 +1,15 @@
 package org.dontexist.kb.service.epuboperations;
 
 import net.lingala.zip4j.exception.ZipException;
+import nl.siegmann.epublib.domain.Resource;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Service for performing basic I/O on ePUB files.
@@ -19,6 +22,14 @@ public interface EpubReaderService {
      * @throws IOException
      */
     Map<String, String> openEpubFindingTextHtmlFiles() throws IOException;
+
+    List<nl.siegmann.epublib.domain.Resource> findCssHrefs();
+
+    Resource findStylesheetCss();
+
+    void letUserEditFiles(Collection<Resource> filesToEdit) throws IOException;
+
+    String editFileText(String windowTitle, String originalFileContent) throws IOException;
 
     /**
      * Writes a single epub file's changes

@@ -2,6 +2,7 @@ package org.dontexist.kb.service.epuboperations;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import nl.siegmann.epublib.domain.Resource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.dontexist.kb.util.CreateZipFileDirectoryUtils;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,6 +82,26 @@ public class ZipEpubReaderServiceImpl implements EpubReaderService {
 
         }
         return filesAsStringToConvert;
+    }
+
+    @Override
+    public List<Resource> findCssHrefs() {
+        throw new UnsupportedOperationException("Not yet written");
+    }
+
+    @Override
+    public Resource findStylesheetCss() {
+        throw new UnsupportedOperationException("Not yet written");
+    }
+
+    @Override
+    public void letUserEditFiles(Collection<Resource> filesToEdit) throws IOException {
+        throw new UnsupportedOperationException("Not yet written");
+    }
+
+    @Override
+    public String editFileText(String windowTitle, String originalFileContent) throws IOException {
+        throw new UnsupportedOperationException("Not yet written");
     }
 
     @Override

@@ -1,7 +1,10 @@
 package org.dontexist.kb;
 
 import net.lingala.zip4j.exception.ZipException;
+import nl.siegmann.epublib.domain.Resource;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.dontexist.kb.service.cssparser.CssParserServiceImpl;
 import org.dontexist.kb.service.epuboperations.EpubReaderService;
 import org.dontexist.kb.service.epuboperations.EpubReaderServiceFactory;
 import org.dontexist.kb.service.converter.UnicodeConverterHelper;
@@ -18,9 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -39,6 +40,8 @@ public class SpringDelegateDriver implements ActionListener {
     private UnicodeConverterHelper unicodeConverterHelper;
     @Autowired
     private EpubValidationService epubValidationService;
+    // TODO autowire
+    private CssParserServiceImpl cssParserService = new CssParserServiceImpl();
 
     /**
      * The method that starts eBook conversion.
@@ -73,20 +76,36 @@ public class SpringDelegateDriver implements ActionListener {
         for (File ithEpub : epubsToConvert) {
             // prototype service, based on file
             final EpubReaderService epubReaderService = epubReaderServiceFactory.createEpubReaderService(ithEpub);
-            final Map<String, String> filesAsStringToConvert = epubReaderService.openEpubFindingTextHtmlFiles();
+            // ask for Devanagari classes
+            final Resource stylesheet = epubReaderService.findStylesheetCss();
+            // TODO move reading to another class
+            final String stylesheetText = IOUtils.toString(stylesheet.getInputStream(), "UTF8");
+            Set<String> devanagariSpanClasses = cssParserService.askForCssSelections(stylesheetText);
+            unicodeConverterHelper.setSanskrit99SpanClasses(devanagariSpanClasses);
+            performUnicodeConversionOnBook(epubReaderService);
+            // ask for css changes
+            // TODO is this the best service?
+            cssParserService.displayMessageDialog("Almost done ... The next screens will allow you to edit the CSS files inside the eBook before the final eBook is written. <b>Please remove all references to non-Unicode fonts (e.g. both Sanskrit99 and PalladioIT) to ensure proper rendering of the output file.</b> (Note: even after conversion, it may be necessary to tweak the stylesheet for proper spacing.)");
+            final List<Resource> cssFiles = epubReaderService.findCssHrefs();
+            epubReaderService.letUserEditFiles(cssFiles);
 
-            for (Map.Entry<String, String> entry : filesAsStringToConvert.entrySet()) {
-                final String ithHref = entry.getKey();
-                final String ithFileAsOneString = entry.getValue();
-                final StringBuilder convertedFileAsString = unicodeConverterHelper.convertFileAsOneStringToUnicode(ithFileAsOneString);
-
-                epubReaderService.writeEpubPage(convertedFileAsString.toString(), ithHref);
-            }
             final String outputFilePath = ithEpub.getParent() + "/" + FilenameUtils.getBaseName(ithEpub.getAbsolutePath()) + "-unicode.epub";
             epubReaderService.flushEpub(outputFilePath);
             // validate output ePUB
             // TODO inject report suffix via property
             epubValidationService.validate(new File(outputFilePath), new File(outputFilePath + "report.txt"));
+        }
+    }
+
+    private void performUnicodeConversionOnBook(EpubReaderService epubReaderService) throws IOException {
+        final Map<String, String> filesAsStringToConvert = epubReaderService.openEpubFindingTextHtmlFiles();
+
+        for (Map.Entry<String, String> entry : filesAsStringToConvert.entrySet()) {
+            final String ithHref = entry.getKey();
+            final String ithFileAsOneString = entry.getValue();
+            final StringBuilder convertedFileAsString = unicodeConverterHelper.convertFileAsOneStringToUnicode(ithFileAsOneString);
+
+            epubReaderService.writeEpubPage(convertedFileAsString.toString(), ithHref);
         }
     }
 

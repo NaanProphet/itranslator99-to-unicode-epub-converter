@@ -39,6 +39,10 @@ public class UnicodeConverterHelper implements InitializingBean {
     @Value("${sanskrit99.span.class}")
     private String sanskrit99SpanClassCsv;
 
+    public void setSanskrit99SpanClasses(Set<String> sanskrit99SpanClasses) {
+        this.sanskrit99SpanClasses = sanskrit99SpanClasses;
+    }
+
     private Set<String> sanskrit99SpanClasses = new HashSet<String>();
 
 

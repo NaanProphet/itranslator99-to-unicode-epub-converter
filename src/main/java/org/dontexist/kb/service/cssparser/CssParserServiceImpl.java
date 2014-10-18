@@ -4,21 +4,20 @@ import com.sun.javafx.css.Rule;
 import com.sun.javafx.css.Selector;
 import com.sun.javafx.css.Stylesheet;
 import com.sun.javafx.css.parser.CSSParser;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.dontexist.kb.swing.TextEditor;
+import org.dontexist.kb.swing.TextDisplayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -66,35 +65,53 @@ public class CssParserServiceImpl {
 
     }
 
-    public String editFileText(final String originalFileContent) throws IOException {
-        final CountDownLatch latch = new CountDownLatch(1);
-        final TextEditor textEditor = new TextEditor(originalFileContent, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                latch.countDown();
-            }
-        });
+    public Set<String> askForCssSelections(final String stylesheetText) {
 
-        TextEditor.askUserToEditText(textEditor);
+        final List<String> cssElements = readElements(stylesheetText);
+
+        displayMessageDialog("In the following screen, the stylesheet.css file inside the eBook will appear. Please review the file and make a <b>mental note of all</b> the styles that apply to <b>custom Devanagari fonts only</b> (e.g. Sanskrit99), as they will be asked for shortly afterwards.");
+
+        CountDownLatch latch = new CountDownLatch(1);
+        TextDisplayer viewSheetDisplay = new TextDisplayer("stylesheet.css", stylesheetText, latch);
+        TextDisplayer.displayFrame(viewSheetDisplay);
         try {
             latch.await();
         } catch (InterruptedException e) {
-            throw new IllegalStateException("Interrupted while editing file!", e);
+            throw new IllegalStateException(e);
         }
-        return textEditor.getSubmittedText();
-    }
 
-    public List<String> askForSelections(final String stylesheetText) {
+        displayMessageDialog("Next, please select all the styles that apply to <b>custom Devanagari fonts only</b> using CTRL. After this, the Unicode conversion process will begin.");
 
-        final List<String> cssElements = readElements(stylesheetText);
         // special thanks to:
         // http://stackoverflow.com/questions/8899605/multiple-choices-from-a-joptionpane
         JList<String> list = new JList(cssElements.toArray());
         JOptionPane.showMessageDialog(
-                null, list, "Please select which css elements are currently used for Devanagari text", JOptionPane.PLAIN_MESSAGE);
+                null, list, "Which are Devanagari elements?",
+                JOptionPane.QUESTION_MESSAGE);
         final List<String> selectedVals = list.getSelectedValuesList();
         LOGGER.debug("Selected values were: {}", selectedVals);
-        return selectedVals;
+
+        // close CSS viewer
+        viewSheetDisplay.closeFrame();
+
+        // TODO this is a hack
+        return new HashSet<String>(selectedVals);
+    }
+
+    public void displayMessageDialog(String s) {
+        String html1 = "<html><body style='width: ";
+        String html2 = "px'>";
+        JOptionPane.showMessageDialog(null, new JLabel(html1+"300"+html2+s));
+    }
+
+    /**
+     * Place a String on the clipboard, and make this class the
+     * owner of the Clipboard's contents.
+     */
+    private void setClipboardContents(String aString){
+        StringSelection stringSelection = new StringSelection(aString);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
     }
 
 

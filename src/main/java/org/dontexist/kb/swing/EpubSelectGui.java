@@ -126,11 +126,11 @@ public class EpubSelectGui extends JPanel implements ActionListener {
                 KeyEvent.VK_S,
                 "Use this option to convert a single ePUB file."),
         ALL_FILES_IN_A_SINGLE_FOLDER(
-                "Convert all ePUB files inside a folder",
+                "Convert all ePUB files in a single folder",
                 KeyEvent.VK_A,
                 "Use this option to convert all ePUB files in a single folder."),
         ALL_FILES_IN_FOLDER_RECURSIVELY(
-                "Convert all ePUB files inside a folder (recursive)",
+                "Convert all ePUB files recursively inside a folder",
                 KeyEvent.VK_R,
                 "Use this option to recursively drilldown and convert all ePUBs in the selected folder.");
 
